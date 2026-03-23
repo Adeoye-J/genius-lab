@@ -47,9 +47,6 @@ importers:
       tailwind-merge:
         specifier: ^2.6.1
         version: 2.6.1
-      uuid:
-        specifier: ^10.0.0
-        version: 10.0.0
     devDependencies:
       '@tailwindcss/postcss':
         specifier: ^4
@@ -75,6 +72,9 @@ importers:
       typescript:
         specifier: ^5
         version: 5.9.3
+      uuid:
+        specifier: ^13.0.0
+        version: 13.0.0
 
 packages:
 
@@ -2426,8 +2426,8 @@ packages:
       '@types/react':
         optional: true
 
-  uuid@10.0.0:
-    resolution: {integrity: sha512-8XkAphELsDnEGrDxUOHB3RGvXz6TeuYSGEZBOjtTtPm2lwhGBjLgOzLHB63IUWfBpNucQjND6d3AOudO+H3RWQ==}
+  uuid@13.0.0:
+    resolution: {integrity: sha512-XQegIaBTVUjSHliKqcnFqYypAd4S+WCYt5NIeRs6w/UAry7z8Y9j5ZwRRL4kzq9U3sD6v+85er9FvkEaBpji2w==}
     hasBin: true
 
   webidl-conversions@7.0.0:
@@ -4958,7 +4958,7 @@ snapshots:
     optionalDependencies:
       '@types/react': 19.2.14
 
-  uuid@10.0.0: {}
+  uuid@13.0.0: {}
 
   webidl-conversions@7.0.0: {}
 
