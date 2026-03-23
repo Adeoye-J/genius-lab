@@ -1,26 +1,306 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ============================================================
+   STREETCRED DESIGN SYSTEM — Tailwind v4 compatible
+   Navy Primary · Slate Secondary · Emerald Tertiary
+   ============================================================ */
+
+@theme {
+  /* ── Border radius ───────────────────────────────────────── */
+  --radius:    0.5rem;
+  --radius-sm: calc(var(--radius) - 2px);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) + 4px);
+  --radius-xl: calc(var(--radius) + 8px);
+
+  /* ── Brand colors exposed to Tailwind utilities ─────────── */
+  /* These become bg-primary, text-accent, border-border, etc. */
+  --color-primary:                  hsl(221 66% 47%);
+  --color-primary-foreground:       hsl(210 40% 98%);
+  --color-secondary:                hsl(229 14% 51%);
+  --color-secondary-foreground:     hsl(210 40% 98%);
+  --color-accent:                   hsl(160 84% 39%);
+  --color-accent-foreground:        hsl(0 0% 100%);
+  --color-muted:                    hsl(214 32% 91%);
+  --color-muted-foreground:         hsl(215 16% 47%);
+  --color-destructive:              hsl(0 84% 60%);
+  --color-destructive-foreground:   hsl(210 40% 98%);
+  --color-background:               hsl(210 40% 98%);
+  --color-foreground:               hsl(222 47% 11%);
+  --color-card:                     hsl(0 0% 100%);
+  --color-card-foreground:          hsl(222 47% 11%);
+  --color-popover:                  hsl(0 0% 100%);
+  --color-popover-foreground:       hsl(222 47% 11%);
+  --color-border:                   hsl(213 27% 84%);
+  --color-input:                    hsl(213 27% 84%);
+  --color-ring:                     hsl(221 66% 47%);
+
+  /* ── Animation shorthand ────────────────────────────────── */
+  --animate-fade-in:              fade-in 0.2s ease-out;
+  --animate-fade-out:             fade-out 0.2s ease-out;
+  --animate-zoom-in:              zoom-in 0.2s ease-out;
+  --animate-slide-in-from-left:   slide-in-from-left 0.2s ease-out;
+  --animate-slide-in-from-right:  slide-in-from-right 0.2s ease-out;
+  --animate-accordion-down:       accordion-down 0.2s ease-out;
+  --animate-accordion-up:         accordion-up 0.2s ease-out;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
+/* ── Dark mode token overrides ───────────────────────────── */
+/* Supports both system preference and .dark class toggle    */
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --color-background:               hsl(222 47% 11%);
+    --color-foreground:               hsl(210 40% 98%);
+    --color-card:                     hsl(217 33% 17%);
+    --color-card-foreground:          hsl(210 40% 98%);
+    --color-popover:                  hsl(217 33% 17%);
+    --color-popover-foreground:       hsl(210 40% 98%);
+    --color-primary:                  hsl(221 72% 57%);
+    --color-primary-foreground:       hsl(222 47% 11%);
+    --color-secondary:                hsl(229 15% 43%);
+    --color-secondary-foreground:     hsl(210 40% 98%);
+    --color-muted:                    hsl(215 25% 27%);
+    --color-muted-foreground:         hsl(215 20% 65%);
+    --color-accent:                   hsl(158 64% 52%);
+    --color-accent-foreground:        hsl(222 47% 11%);
+    --color-destructive:              hsl(0 62% 50%);
+    --color-destructive-foreground:   hsl(210 40% 98%);
+    --color-border:                   hsl(215 25% 27%);
+    --color-input:                    hsl(215 25% 27%);
+    --color-ring:                     hsl(221 72% 57%);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+.dark {
+  --color-background:               hsl(222 47% 11%);
+  --color-foreground:               hsl(210 40% 98%);
+  --color-card:                     hsl(217 33% 17%);
+  --color-card-foreground:          hsl(210 40% 98%);
+  --color-popover:                  hsl(217 33% 17%);
+  --color-popover-foreground:       hsl(210 40% 98%);
+  --color-primary:                  hsl(221 72% 57%);
+  --color-primary-foreground:       hsl(222 47% 11%);
+  --color-secondary:                hsl(229 15% 43%);
+  --color-secondary-foreground:     hsl(210 40% 98%);
+  --color-muted:                    hsl(215 25% 27%);
+  --color-muted-foreground:         hsl(215 20% 65%);
+  --color-accent:                   hsl(158 64% 52%);
+  --color-accent-foreground:        hsl(222 47% 11%);
+  --color-destructive:              hsl(0 62% 50%);
+  --color-destructive-foreground:   hsl(210 40% 98%);
+  --color-border:                   hsl(215 25% 27%);
+  --color-input:                    hsl(215 25% 27%);
+  --color-ring:                     hsl(221 72% 57%);
+
+  --sidebar-background:             hsl(222 47% 11%);
+  --sidebar-foreground:             hsl(210 40% 98%);
+  --sidebar-primary:                hsl(158 64% 52%);
+  --sidebar-primary-foreground:     hsl(222 47% 11%);
+  --sidebar-accent:                 hsl(217 33% 17%);
+  --sidebar-accent-foreground:      hsl(210 40% 98%);
+  --sidebar-border:                 hsl(215 25% 27%);
+  --sidebar-ring:                   hsl(158 64% 52%);
 }
+
+/* ── Sidebar + brand scale (raw CSS vars, not Tailwind) ───── */
+:root {
+  --sidebar-background:             hsl(221 68% 38%);
+  --sidebar-foreground:             hsl(210 40% 98%);
+  --sidebar-primary:                hsl(160 84% 39%);
+  --sidebar-primary-foreground:     hsl(0 0% 100%);
+  --sidebar-accent:                 hsl(221 71% 30%);
+  --sidebar-accent-foreground:      hsl(210 40% 98%);
+  --sidebar-border:                 hsl(221 73% 22%);
+  --sidebar-ring:                   hsl(160 84% 39%);
+
+  /* Used in gradient-primary and gradient-accent utilities */
+  --primary-800:    hsl(221 73% 22%);
+  --tertiary-400:   hsl(158 64% 52%);
+  --tertiary-600:   hsl(161 94% 30%);
+}
+
+/* ============================================================
+   BASE RESET
+   ============================================================ */
+*, *::before, *::after {
+  border-color: var(--color-border);
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  font-feature-settings: "rlig" 1, "calt" 1;
+}
+
+*:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-background), 0 0 0 4px var(--color-ring);
+}
+
+/* ============================================================
+   TYPOGRAPHY
+   ============================================================ */
+h1 {
+  scroll-margin-top: 5rem;
+  font-size: 2.25rem;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+}
+@media (min-width: 1024px) { h1 { font-size: 3rem; } }
+
+h2 {
+  scroll-margin-top: 5rem;
+  font-size: 1.875rem;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+}
+
+h3 {
+  scroll-margin-top: 5rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+
+h4 {
+  scroll-margin-top: 5rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+
+p { line-height: 1.75; }
+p + p { margin-top: 1.5rem; }
+
+blockquote {
+  margin-top: 1.5rem;
+  border-left: 2px solid var(--color-primary);
+  padding-left: 1.5rem;
+  font-style: italic;
+}
+
+code {
+  position: relative;
+  border-radius: 0.25rem;
+  background-color: var(--color-muted);
+  padding: 0.2rem 0.3rem;
+  font-family: ui-monospace, monospace;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+/* ── text-label utility class ─────────────────────────────── */
+.text-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-muted-foreground);
+}
+
+/* ============================================================
+   BRAND UTILITY CLASSES
+   ============================================================ */
+.gradient-primary {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--primary-800) 100%);
+}
+
+.gradient-accent {
+  background: linear-gradient(135deg, var(--tertiary-400) 0%, var(--tertiary-600) 100%);
+}
+
+.gradient-hero {
+  background: linear-gradient(
+    135deg,
+    var(--color-primary)    0%,
+    var(--color-secondary)  60%,
+    var(--color-accent)     100%
+  );
+}
+
+.surface-muted   { background-color: var(--color-muted);   color: var(--color-muted-foreground); }
+.surface-primary { background-color: var(--color-primary); color: var(--color-primary-foreground); }
+.surface-accent  { background-color: var(--color-accent);  color: var(--color-accent-foreground); }
+
+.border-subtle { border: 1px solid color-mix(in srgb, var(--color-border) 50%, transparent); }
+.border-strong { border: 1px solid var(--color-border); }
+
+.glow-primary { box-shadow: 0 0 20px color-mix(in srgb, var(--color-primary) 35%, transparent); }
+.glow-accent  { box-shadow: 0 0 20px color-mix(in srgb, var(--color-accent)  40%, transparent); }
+
+.btn-accent {
+  background-color: var(--color-accent);
+  color: var(--color-accent-foreground);
+  transition: background-color 150ms;
+}
+.btn-accent:hover {
+  background-color: color-mix(in srgb, var(--color-accent) 90%, black);
+}
+
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) transparent;
+}
+.scrollbar-thin::-webkit-scrollbar { width: 6px; height: 6px; }
+.scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background-color: var(--color-border);
+  border-radius: 9999px;
+}
+
+/* ============================================================
+   KEYFRAMES
+   ============================================================ */
+@keyframes accordion-down {
+  from { height: 0; }
+  to   { height: var(--radix-accordion-content-height); }
+}
+@keyframes accordion-up {
+  from { height: var(--radix-accordion-content-height); }
+  to   { height: 0; }
+}
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fade-out {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(4px); }
+}
+@keyframes slide-in-from-left {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(0); }
+}
+@keyframes slide-in-from-right {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0); }
+}
+@keyframes zoom-in {
+  from { opacity: 0; transform: scale(0.95); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes spin  { to { transform: rotate(360deg); } }
+@keyframes ping  { 75%, 100% { transform: scale(2); opacity: 0; } }
+@keyframes pulse { 50% { opacity: 0.5; } }
+@keyframes bounce {
+  0%, 100% { transform: translateY(-25%); animation-timing-function: cubic-bezier(0.8,0,1,1); }
+  50%       { transform: none;            animation-timing-function: cubic-bezier(0,0,0.2,1); }
+}
+
+/* ── Animation utility classes ────────────────────────────── */
+.animate-accordion-down      { animation: accordion-down 0.2s ease-out; }
+.animate-accordion-up        { animation: accordion-up   0.2s ease-out; }
+.animate-fade-in             { animation: fade-in        0.2s ease-out; }
+.animate-fade-out            { animation: fade-out       0.2s ease-out; }
+.animate-zoom-in             { animation: zoom-in        0.2s ease-out; }
+.animate-slide-in-from-left  { animation: slide-in-from-left  0.2s ease-out; }
+.animate-slide-in-from-right { animation: slide-in-from-right 0.2s ease-out; }
+.animate-spin    { animation: spin   1s  linear                     infinite; }
+.animate-ping    { animation: ping   1s  cubic-bezier(0,0,0.2,1)   infinite; }
+.animate-pulse   { animation: pulse  2s  cubic-bezier(0.4,0,0.6,1) infinite; }
+.animate-bounce  { animation: bounce 1s  infinite; }
+.animate-in-fast { animation-duration: 150ms; }
+.animate-in-slow { animation-duration: 500ms; }
