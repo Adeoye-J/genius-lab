@@ -41,7 +41,7 @@ export default function CustomerHistoryPage() {
     <div className="max-w-3xl animate-fade-in">
       <div className="mb-6">
         <h1 className="text-3xl font-extrabold text-foreground mb-1">Job history</h1>
-        <p className="text-muted-foreground text-sm">All jobs you have requested</p>
+        <p className="text-muted-foreground text-sm">All jobs you have requested here</p>
       </div>
 
       {loading ? (
