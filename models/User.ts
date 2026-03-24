@@ -70,11 +70,17 @@ const UserSchema = new mongoose.Schema<IUser>(
     timestamps: true,
     // Never return passwordHash unless explicitly selected
     toJSON: {
-      transform(_, ret) {
-        delete ret.passwordHash;
-        return ret;
+      transform(_, ret: any) {
+        const {passwordHash, ...rest} = ret;
+        return rest;
       },
     },
+    // toJSON: {
+    //   transform(_, ret: Partial<IUser>) {
+    //     delete ret.passwordHash;
+    //     return ret;
+    //   },
+    // },
   }
 );
 
