@@ -106,7 +106,7 @@ export async function acceptJob(jobId: string, workerId: string) {
 
   // Verify actor is the assigned worker
   const profile = await WorkerProfile.findOne({ userId: workerId });
-  if (!profile || profile._id.toString() !== job.workerId.toString()) {
+  if (!profile || profile._id.toString() !== job.workerId._id.toString()) {
     throw new Error('Forbidden: only the assigned worker can accept this job');
   }
 

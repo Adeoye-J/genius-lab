@@ -15,7 +15,7 @@ export default function LoginPage() {
   const [error, setError]         = useState('');
   const [loading, setLoading]     = useState(false);
 
-  async function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.SubmitEvent) {
     e.preventDefault();
     setError('');
 
@@ -62,14 +62,9 @@ export default function LoginPage() {
 
   return (
     <div className="animate-fade-in">
-      <div className="mb-8">
-        <h2 className="text-3xl font-extrabold text-foreground mb-2">Welcome back</h2>
-        <p className="text-muted-foreground">
-          Don&apos;t have an account?{' '}
-          <Link href="/register" className="text-primary font-semibold hover:underline">
-            Create one free
-          </Link>
-        </p>
+      <div className="mb-8 text-center">
+        <h2 className="text-3xl font-extrabold text-primary mb-2">Welcome back</h2>
+        <p className='text-muted-foreground font-semibold'>Start building your reputation today.</p>
       </div>
 
       <form onSubmit={handleSubmit} noValidate className="space-y-4">
@@ -134,9 +129,9 @@ export default function LoginPage() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full h-11 rounded-lg bg-primary text-primary-foreground font-semibold text-sm
+          className="w-full h-11 rounded-lg bg-primary text-white font-semibold text-sm
             hover:bg-primary/90 active:scale-[0.98] transition-all duration-150
-            disabled:opacity-60 disabled:cursor-not-allowed mt-2"
+            disabled:opacity-60 disabled:cursor-not-allowed mt-2 cursor-pointer"
         >
           {loading ? (
             <span className="flex items-center justify-center gap-2">
@@ -150,6 +145,13 @@ export default function LoginPage() {
             'Sign in'
           )}
         </button>
+
+        <p className="text-muted-foreground text-center">
+          Don&apos;t have an account?{' '}
+          <Link href="/register" className="text-primary font-semibold hover:underline">
+            Create Account
+          </Link>
+        </p>
       </form>
     </div>
   );

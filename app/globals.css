@@ -141,16 +141,16 @@ body {
 /* ============================================================
    TYPOGRAPHY
    ============================================================ */
-h1 {
+/* h1 {
   scroll-margin-top: 5rem;
   font-size: 2.25rem;
   font-weight: 800;
   letter-spacing: -0.025em;
   line-height: 1.1;
 }
-@media (min-width: 1024px) { h1 { font-size: 3rem; } }
+@media (min-width: 1024px) { h1 { font-size: 3rem; } } */
 
-h2 {
+/* h2 {
   scroll-margin-top: 5rem;
   font-size: 1.875rem;
   font-weight: 600;
@@ -170,7 +170,7 @@ h4 {
   font-size: 1.25rem;
   font-weight: 600;
   letter-spacing: -0.025em;
-}
+} */
 
 p { line-height: 1.75; }
 p + p { margin-top: 1.5rem; }

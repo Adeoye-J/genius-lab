@@ -6,11 +6,12 @@ import { handleApiError } from '@/utils/errorHandler';
 
 export async function GET(
   _req: NextRequest,
-  { params }: { params: { jobId: string } }
+  { params }: { params: Promise<{ jobId: string }> }
 ) {
+  const {jobId} = await params
   try {
     const user = await requireAuth();
-    const result = await getJobWithTimeline(params.jobId);
+    const result = await getJobWithTimeline(jobId);
 
     if (!result) {
       return NextResponse.json({ success: false, error: 'Job not found' }, { status: 404 });
@@ -21,8 +22,8 @@ export async function GET(
       ? await WorkerProfile.findOne({ userId: user.id }).lean()
       : null;
 
-    const isCustomer = result.customerId.toString() === user.id;
-    const isWorker   = workerProfile && result.workerId.toString() === workerProfile._id.toString();
+    const isCustomer = result.customerId._id.toString() === user.id;
+    const isWorker   = workerProfile && result.workerId._id.toString() === workerProfile._id.toString();
 
     if (!isCustomer && !isWorker && user.role !== 'admin') {
       return NextResponse.json({ success: false, error: 'Forbidden' }, { status: 403 });
@@ -30,6 +31,6 @@ export async function GET(
 
     return NextResponse.json({ success: true, data: result });
   } catch (error) {
-    return handleApiError(error, `GET /api/jobs/${params.jobId}`);
+    return handleApiError(error, `GET /api/jobs/${jobId}`);
   }
 }

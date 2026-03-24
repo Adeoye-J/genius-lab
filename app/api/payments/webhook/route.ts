@@ -1,61 +1,54 @@
 // app/api/payments/webhook/route.ts
-// Interswitch posts here when a payment is confirmed asynchronously.
-// Register this URL in your Interswitch merchant dashboard:
-//   https://your-app.vercel.app/api/payments/webhook
+// Interswitch posts here when a transaction status changes.
+// Register this URL in your Quickteller Business Dashboard → Webhooks.
 //
-// IMPORTANT: Verify the webhook signature in production.
-// Interswitch sends a hash in the header — validate it to prevent spoofing.
+// URL to register: https://street-cred.vercel.app/api/payments/webhook
+//
+// The webhook payload contains the transaction reference.
+// We do NOT trust the payload status — we call verifyTransaction() ourselves.
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createHmac } from 'crypto';
-// import { verifyAndSettlePayment } from '@/services/paymentService';
-import { env } from '@/config/env';
+import { verifyAndSettlePayment } from '@/services/paymentService';
 
 export async function POST(req: NextRequest) {
   try {
-    const body    = await req.text();
-    const payload = JSON.parse(body);
+    let transactionRef: string | undefined;
 
-    // ── Signature verification ────────────────────────────────────
-    // Interswitch sends an X-Interswitch-Signature header.
-    // We verify it using our CLIENT_SECRET as the HMAC key.
-    // Skip in development when no secret is set.
-    if (env.interswitchClientSecret && env.isProd) {
-      const signature = req.headers.get('x-interswitch-signature') ?? '';
-      const expected  = createHmac('sha512', env.interswitchClientSecret)
-        .update(body)
-        .digest('hex');
+    const contentType = req.headers.get('content-type') ?? '';
 
-      if (signature !== expected) {
-        console.warn('[Webhook] Invalid signature — rejecting');
-        return NextResponse.json({ error: 'Invalid signature' }, { status: 401 });
-      }
+    // Interswitch may send JSON or form-encoded depending on configuration
+    if (contentType.includes('application/json')) {
+      const body = await req.json();
+      transactionRef =
+        body.transactionReference ??
+        body.TransactionReference ??
+        body.txnRef ??
+        body.txnref ??
+        body.merchantReference ??
+        body.MerchantReference;
+    } else {
+      const form = await req.formData();
+      transactionRef =
+        form.get('transactionReference')?.toString() ??
+        form.get('txnref')?.toString() ??
+        form.get('txnRef')?.toString();
     }
 
-    // ── Extract transaction reference ─────────────────────────────
-    // Interswitch webhook payload field names vary by plan/version.
-    // Check both camelCase and PascalCase.
-    const transactionRef =
-      payload.transactionReference ??
-      payload.TransactionReference ??
-      payload.merchantReference ??
-      payload.MerchantReference;
-
     if (!transactionRef) {
-      console.warn('[Webhook] No transaction reference in payload:', payload);
+      console.warn('[Webhook] No transaction reference in payload');
       // Return 200 so Interswitch stops retrying
       return NextResponse.json({ received: true });
     }
 
-    // Process asynchronously — don't await in the response cycle
-    // (webhook expects a fast 200 response)
-    // verifyAndSettlePayment(transactionRef).catch((err) => {
-    //   console.error('[Webhook] Settlement error:', err.message);
-    // });
+    // Fire and forget — respond immediately, settle in background
+    verifyAndSettlePayment(transactionRef).catch((err) => {
+      console.error('[Webhook] Settlement error for', transactionRef, ':', err.message);
+    });
 
     return NextResponse.json({ received: true });
   } catch (error) {
-    console.error('[Webhook] Parse error:', error);
-    return NextResponse.json({ received: true }); // always 200 to Interswitch
+    console.error('[Webhook] Error:', error);
+    // Always return 200 to stop Interswitch retry loop
+    return NextResponse.json({ received: true });
   }
 }

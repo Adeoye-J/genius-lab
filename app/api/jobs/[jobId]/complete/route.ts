@@ -5,13 +5,14 @@ import { handleApiError } from '@/utils/errorHandler';
 
 export async function POST(
   _req: NextRequest,
-  { params }: { params: { jobId: string } }
+  { params }: { params: Promise<{ jobId: string }> }
 ) {
+  const {jobId} = await params
   try {
     const user = await requireRole('worker');
-    const job  = await completeJob(params.jobId, user.id);
+    const job  = await completeJob(jobId, user.id);
     return NextResponse.json({ success: true, data: job });
   } catch (error) {
-    return handleApiError(error, `POST /api/jobs/${params.jobId}/complete`);
+    return handleApiError(error, `POST /api/jobs/${jobId}/complete`);
   }
 }

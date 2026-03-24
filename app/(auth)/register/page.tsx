@@ -103,14 +103,9 @@ export default function RegisterPage() {
 
   return (
     <div className="animate-fade-in">
-      <div className="mb-8">
-        <h2 className="text-3xl font-extrabold text-foreground mb-2">Create your account</h2>
-        <p className="text-muted-foreground">
-          Already have an account?{' '}
-          <Link href="/login" className="text-primary font-semibold hover:underline">
-            Sign in
-          </Link>
-        </p>
+      <div className="mb-8 text-center">
+        <h2 className="text-3xl font-extrabold text-primary mb-2">Join the Future of Work</h2>
+        <p className='text-muted-foreground font-semibold'>Start building your reputation today.</p>
       </div>
 
       {/* Role selector */}
@@ -123,7 +118,7 @@ export default function RegisterPage() {
               type="button"
               onClick={() => setForm((p) => ({ ...p, role }))}
               className={`
-                relative p-4 rounded-xl border-2 text-left transition-all duration-150
+                relative p-4 rounded-xl border-2 text-left transition-all duration-150 cursor-pointer
                 ${form.role === role
                   ? 'border-primary bg-primary/5'
                   : 'border-border bg-card hover:border-border/80'
@@ -263,9 +258,9 @@ export default function RegisterPage() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full h-11 rounded-lg bg-primary text-primary-foreground font-semibold text-sm
+          className="w-full h-11 rounded-lg bg-primary text-white font-semibold text-sm
             hover:bg-primary/90 active:scale-[0.98] transition-all duration-150
-            disabled:opacity-60 disabled:cursor-not-allowed mt-2"
+            disabled:opacity-60 disabled:cursor-not-allowed mt-2 cursor-pointer"
         >
           {loading ? (
             <span className="flex items-center justify-center gap-2">
@@ -285,6 +280,12 @@ export default function RegisterPage() {
           <Link href="/terms" className="underline hover:text-foreground">Terms of Service</Link>
           {' '}and{' '}
           <Link href="/privacy" className="underline hover:text-foreground">Privacy Policy</Link>.
+        </p>
+        <p className="text-muted-foreground text-center">
+          Already have an account?{' '}
+          <Link href="/login" className="text-primary font-semibold hover:underline">
+            Sign in
+          </Link>
         </p>
       </form>
     </div>

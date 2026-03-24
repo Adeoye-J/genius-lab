@@ -8,10 +8,11 @@ import type { ApiResponse } from '@/types';
 
 export async function GET(
   _req: NextRequest,
-  { params }: { params: { workerId: string } }
+  { params }: { params: Promise<{ workerId: string }> }
 ) {
+  const {workerId} = await params
   try {
-    const worker = await getWorkerById(params.workerId);
+    const worker = await getWorkerById(workerId);
     if (!worker) {
       return NextResponse.json<ApiResponse>(
         { success: false, error: 'Worker not found' },
@@ -22,7 +23,7 @@ export async function GET(
     await connectDB();
 
     // Fetch recent reviews for the public profile
-    const reviews = await Review.find({ workerId: params.workerId })
+    const reviews = await Review.find({ workerId: workerId })
       .sort({ createdAt: -1 })
       .limit(10)
       .populate('customerId', 'name')
@@ -33,6 +34,6 @@ export async function GET(
       data: { ...worker, reviews },
     });
   } catch (error) {
-    return handleApiError(error, `GET /api/workers/${params.workerId}`);
+    return handleApiError(error, `GET /api/workers/${workerId}`);
   }
 }

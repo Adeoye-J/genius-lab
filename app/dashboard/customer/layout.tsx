@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-// import { NotificationsBell } from '@/components/ui/NotificationsBell';
+import { NotificationsBell } from '@/components/ui/NotificationsBell';
 
 const NAV_ITEMS = [
   {
@@ -101,7 +101,7 @@ export default function CustomerDashboardLayout({ children }: { children: React.
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>
           </button>
           <span className="font-bold text-foreground flex-1">StreetCred</span>
-          {/* <NotificationsBell /> */}
+          <NotificationsBell />
         </div>
         <main className="flex-1 p-6 lg:p-8 overflow-auto">{children}</main>
       </div>
