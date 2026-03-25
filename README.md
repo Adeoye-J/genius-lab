@@ -16,6 +16,20 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+## Seed Demo Data
+
+This project includes a deterministic demo seeder for presentation data.
+
+1. Ensure your `.env.local` has `MONGODB_URI` and `SESSION_SECRET`.
+2. Install dependencies.
+3. Run:
+
+```bash
+pnpm seed:demo
+```
+
+The seeder recreates demo records on each run and prints seeded totals plus the demo login password.
+
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
