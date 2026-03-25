@@ -94,20 +94,20 @@ function Sidebar({ userName, onLogout }: { userName: string; onLogout: () => voi
       <div className="p-4 border-t-2">
         <div className="flex items-center gap-3 px-3 py-2 mb-2">
           <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center shrink-0">
-            <span className="text-primary text-xs font-bold">
+            <span className="text-primary text-sm font-bold">
               {userName.split(' ').map((n) => n[0]).join('').slice(0, 2).toUpperCase()}
             </span>
           </div>
           <div className="min-w-0">
-            <p className="text-sm font-medium text-primary truncate capitalize">{userName}</p>
+            <p className="flex text-sm font-semibold text-primary truncate capitalize">{userName}</p>
             <p className="text-xs">Worker</p>
           </div>
         </div>
         <button
           onClick={onLogout}
-          className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all hover:bg-primary/10 font-semibold cursor-pointer"
+          className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all bg-destructive text-white hover:bg-destructive/90 font-semibold cursor-pointer"
         >
-          <DoorOpen className='text-primary' />
+          <DoorOpen />
           Sign out
         </button>
       </div>

@@ -184,7 +184,7 @@ export default function HirePage() {
               type="text"
               value={city}
               onChange={(e) => setCity(e.target.value)}
-              placeholder="Lagos"
+              placeholder="Ikeja"
               className="w-full h-11 px-4 rounded-lg border border-input bg-card text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring"
             />
           </div>

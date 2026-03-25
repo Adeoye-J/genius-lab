@@ -33,7 +33,8 @@ import { env } from '@/config/env';
 export function getPassportUrl(): string {
   return env.interswitchPassportUrl ?? (
     env.isProd
-      ? 'https://passport.interswitchng.com'
+      // ? 'https://passport.interswitchng.com'
+      ? 'https://qa.interswitchng.com'
       : 'https://qa.interswitchng.com'
   );
 }
@@ -49,6 +50,7 @@ export function getWebpayBaseUrl(): string {
 
 export function getInlineScriptUrl(): string {
   return env.isProd
+    // ? 'https://newwebpay.interswitchng.com/inline-checkout.js'
     ? 'https://newwebpay.qa.interswitchng.com/inline-checkout.js'
     : 'https://newwebpay.qa.interswitchng.com/inline-checkout.js';
 }

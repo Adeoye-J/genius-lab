@@ -1,5 +1,9 @@
 'use client';
-// app/dashboard/worker/page.tsx
+
+import { useWorker } from '@/hooks/useWorker';
+import { formatNGNCompact } from '@/utils/formatCurrency';
+import { ArrowRight } from 'lucide-react';
+import Link from 'next/link';
 import { useState, useEffect } from 'react';
 
 interface WorkerStats {
@@ -57,6 +61,7 @@ function TrustScoreRing({ score }: { score: number }) {
 export default function WorkerDashboardPage() {
   const [stats, setStats]     = useState<WorkerStats | null>(null);
   const [loading, setLoading] = useState(true);
+  const {worker} = useWorker()
 
   useEffect(() => {
     Promise.all([
@@ -99,9 +104,9 @@ export default function WorkerDashboardPage() {
   return (
     <div className="max-w-5xl animate-fade-in">
       <div className="mb-8">
-        <p className="text-muted-foreground text-sm mb-1">{greeting}</p>
-        <h1 className="text-3xl font-extrabold text-foreground">{stats?.name?.split(' ')[0] ?? 'Worker'} 👋</h1>
-        <p className="text-muted-foreground mt-1">{stats?.profession}</p>
+        <p className="text-foreground font-semibold text-xl mb-1">{greeting} <span className="capitalize text-primary font-bold">{stats?.name?.split(' ')[0] ?? 'Worker'} 👋</span></p>
+        {/* <h1 className="text-3xl font-extrabold text-foreground">{stats?.name?.split(' ')[0] ?? 'Worker'} 👋</h1> */}
+        <p className="text-muted-foreground mt-1">Here's your activity</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
@@ -110,10 +115,28 @@ export default function WorkerDashboardPage() {
         </div>
         <div className="lg:col-span-3 grid grid-cols-2 sm:grid-cols-3 gap-4">
           <StatCard label="Total Earnings"    value={`₦${(stats?.totalEarnings ?? 0).toLocaleString('en-NG')}`} sub="Verified payments" />
+          {/* <StatCard label="Total Earnings"    value={formatNGNCompact(stats?.totalEarnings ?? 0)} sub="Verified payments" /> */}
           <StatCard label="Jobs Completed"    value={String(stats?.totalJobsCompleted ?? 0)} sub="Verified by customers" />
           <StatCard label="Average Rating"    value={stats?.averageRating ? stats.averageRating.toFixed(1) : '—'} sub="★ out of 5.0" accent />
           <StatCard label="Pending Requests"  value={String(stats?.pendingJobs ?? 0)} sub="Awaiting your response" />
           <StatCard label="Active Jobs"       value={String(stats?.activeJobs ?? 0)} sub="Currently in progress" />
+        </div>
+      </div>
+
+      <div className="space-y-4">
+        <div className="flex items-center justify-between gap-3">
+          <div className="">
+            <h2 className='font-bold text-primary'>Active Jobs</h2>
+            <p className='text-sm text-muted-foreground'>Manage your ongoing tasks</p>
+          </div>
+          <Link href={""} className='flex items-center gap-2 text-sm'>
+            View All Jobs
+            <ArrowRight size={16} />
+          </Link>
+        </div>
+
+        <div className="">
+          
         </div>
       </div>
 

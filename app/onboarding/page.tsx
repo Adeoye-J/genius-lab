@@ -148,7 +148,7 @@ function WorkerStep2({ data, setData, onNext, onBack }: {
             type="text"
             value={data.city}
             onChange={(e) => setData({ city: e.target.value })}
-            placeholder="Lagos"
+            placeholder="Ikeja"
             className={`w-full h-11 px-4 rounded-lg border bg-card text-foreground placeholder:text-muted-foreground text-sm
               focus:outline-none focus:ring-2 focus:ring-ring ${error ? 'border-destructive' : 'border-input'}`}
           />

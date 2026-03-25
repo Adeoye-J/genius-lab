@@ -1,5 +1,6 @@
 'use client';
 
+import { formatNGNCompact } from '@/utils/formatCurrency';
 import { useState, useEffect } from 'react';
 
 interface Payment {
@@ -61,8 +62,10 @@ export default function WorkerPaymentsPage() {
       {summary && (
         <div className="grid grid-cols-3 gap-4 mb-8">
           {[
-            { label: 'Total earned',   value: `₦${summary.totalEarnings.toLocaleString('en-NG')}`,   accent: true  },
-            { label: 'This month',     value: `₦${summary.monthlyEarnings.toLocaleString('en-NG')}`, accent: false },
+            // { label: 'Total earned',   value: `₦${summary.totalEarnings.toLocaleString('en-NG')}`,   accent: true  },
+            // { label: 'This month',     value: `₦${summary.monthlyEarnings.toLocaleString('en-NG')}`, accent: false },
+            { label: 'Total earned',   value: formatNGNCompact(summary.totalEarnings),   accent: true  },
+            { label: 'This month',     value: formatNGNCompact(summary.monthlyEarnings), accent: false },
             { label: 'Total payments', value: String(summary.totalPayments),                          accent: false },
           ].map((s) => (
             <div key={s.label} className={`rounded-xl p-4 border ${s.accent ? 'bg-accent/10 border-accent/20' : 'bg-card border-border'}`}>

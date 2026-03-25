@@ -75,7 +75,7 @@ export default function CustomerHistoryPage() {
                       {new Date(job.createdAt).toLocaleDateString('en-NG', { day: 'numeric', month: 'short', year: 'numeric' })}
                     </p>
                   </div>
-                  <div className="flex items-center gap-3 flex-shrink-0">
+                  <div className="flex items-center gap-3 shrink-0">
                     <span className="font-bold text-foreground">₦{job.price.toLocaleString('en-NG')}</span>
                     <span className={`text-xs font-semibold px-2.5 py-0.5 rounded-full border ${cfg.color}`}>{cfg.label}</span>
                   </div>
