@@ -1,15 +1,17 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { checkReviewStatus } from '@/services/reviewService';
 import { handleApiError } from '@/utils/errorHandler';
 
 export async function GET(
-  { params }: { params: Promise<{ JobId: string }> }
+  request: NextRequest,
+  context: { params: Promise<{ jobId: string }> }
 ) {
-    const {JobId} = await params
+  const { jobId } = await context.params;
+
   try {
-    const result = await checkReviewStatus(JobId);
+    const result = await checkReviewStatus(jobId);
     return NextResponse.json({ success: true, data: result });
   } catch (error) {
-    return handleApiError(error, `GET /api/reviews/${JobId}`);
+    return handleApiError(error, `GET /api/reviews/${jobId}`);
   }
 }
