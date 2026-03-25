@@ -19,21 +19,23 @@ export default function CustomerDashboardPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <svg className="w-8 h-8 animate-spin text-primary" fill="none" viewBox="0 0 24 24">
-          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-        </svg>
-      </div>
+      <div className="flex items-center justify-center text-center py-16">
+          <div className="flex flex-col gap-3 items-center justify-center h-64">
+            <svg className="w-8 h-8 animate-spin text-primary" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+            </svg>
+            <p className="text-sm text-foreground/60">Loading your dashboard...</p>
+          </div>
+        </div>
     );
   }
 
   return (
     <div className="max-w-4xl animate-fade-in">
       <div className="mb-8">
-        <p className="text-muted-foreground text-sm mb-1">{greeting}</p>
-        <h1 className="text-3xl font-extrabold text-foreground">{name.split(' ')[0]} 👋</h1>
-        <p className="text-muted-foreground mt-1">Find and hire skilled workers near you</p>
+        <p className="text-foreground font-semibold text-xl mb-1 capitalize">{greeting} <span className="capitalize text-primary font-bold">{name.split(' ')[0]} 👋</span></p>
+        <p className="text-sm text-foreground/60">Find and hire skilled workers near you</p>
       </div>
 
       <div className="gradient-primary rounded-2xl p-8 mb-8 text-white">

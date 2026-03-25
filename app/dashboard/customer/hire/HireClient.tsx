@@ -80,10 +80,10 @@ export default function HireClient({preselectedWorkerId} : {preselectedWorkerId:
   }
 
   return (
-    <div className="max-w-2xl animate-fade-in">
+    <div className="max-w-4xl animate-fade-in">
       <div className="mb-8">
-        <h1 className="text-3xl font-extrabold text-foreground mb-1">Hire a worker</h1>
-        <p className="text-muted-foreground">Describe what you need and set a price. The worker will accept or decline.</p>
+         <p className="text-foreground font-semibold text-xl mb-1 capitalize">Hire a worker</p>
+          <p className="text-sm text-foreground/60">Describe what you need and set a price. The worker will accept or decline.</p>
       </div>
 
       {/* Selected worker summary */}
@@ -95,8 +95,8 @@ export default function HireClient({preselectedWorkerId} : {preselectedWorkerId:
             </span>
           </div>
           <div>
-            <p className="font-semibold text-foreground text-sm">{worker.userId.name}</p>
-            <p className="text-xs text-muted-foreground">{worker.profession} · {worker.location.city} · Trust score: {worker.trustScore}</p>
+            <p className="font-semibold text-foreground text-sm capitalize">{worker.userId.name}</p>
+            <p className="text-xs text-muted-foreground">{worker.profession} · {worker.location.city}, {worker.location.state} · Trust score: {worker.trustScore}</p>
           </div>
           <button
             type="button"
@@ -121,7 +121,7 @@ export default function HireClient({preselectedWorkerId} : {preselectedWorkerId:
                 placeholder="Paste worker ID from their profile"
                 className={`flex-1 h-11 px-4 rounded-lg border bg-card text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring ${errors.workerId ? 'border-destructive' : 'border-input'}`}
               />
-              <a href="/workers" className="h-11 px-4 flex items-center bg-muted text-muted-foreground text-sm rounded-lg hover:bg-muted/80 transition-all whitespace-nowrap">
+              <a href="/workers" className="h-11 px-4 flex items-center bg-primary text-primary-foreground font-semibold text-sm hover:bg-primary/90 active:scale-[0.98] transition-all rounded-lg whitespace-nowrap">
                 Browse workers
               </a>
             </div>
@@ -223,7 +223,7 @@ export default function HireClient({preselectedWorkerId} : {preselectedWorkerId:
             Cancel
           </button>
           <button type="submit" disabled={loading}
-            className="flex-1 h-11 rounded-lg bg-primary text-primary-foreground font-semibold text-sm hover:bg-primary/90 active:scale-[0.98] transition-all disabled:opacity-60"
+            className="flex-1 h-11 rounded-lg bg-primary text-primary-foreground font-semibold text-sm hover:bg-primary/90 active:scale-[0.98] transition-all disabled:opacity-60 cursor-pointer"
           >
             {loading ? (
               <span className="flex items-center justify-center gap-2">

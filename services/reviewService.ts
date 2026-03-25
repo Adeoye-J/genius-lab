@@ -41,6 +41,19 @@ export async function createReview(params: {
   return review;
 }
 
+export async function checkReviewStatus(jobId: string) {
+
+  await connectDB();
+
+  const existing = await Review.findOne({jobId})
+
+  if (existing) {
+    return true
+  } else {
+    return false
+  }
+}
+
 export async function getWorkerReviews(workerId: string, page = 1, limit = 10) {
   await connectDB();
   const skip  = (page - 1) * limit;

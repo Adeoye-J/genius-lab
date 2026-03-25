@@ -1,10 +1,8 @@
 'use client';
 
-// Uses /api/analytics/worker for all data.
-// Charts are rendered as pure SVG — no chart library dependency.
-
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { TrendingUp, Target, Award, BarChart3 } from 'lucide-react';
 
 interface AnalyticsData {
   trustScore: number;
@@ -19,7 +17,6 @@ interface AnalyticsData {
   statusBreakdown: { status: string; count: number }[];
 }
 
-// ── Earnings bar chart (SVG) ──────────────────────────────────────
 function EarningsChart({ data }: { data: { month: string; earnings: number }[] }) {
   const max = Math.max(...data.map((d) => d.earnings), 1);
   const W = 580, H = 140, BAR_W = Math.floor(W / data.length) - 8, PAD = 4;
@@ -35,14 +32,14 @@ function EarningsChart({ data }: { data: { month: string; earnings: number }[] }
             <rect
               x={x} y={y} width={BAR_W} height={barH}
               rx={4}
-              fill={d.earnings > 0 ? 'hsl(var(--accent))' : 'hsl(var(--muted))'}
-              opacity={d.earnings > 0 ? 0.85 : 0.4}
+              fill={d.earnings > 0 ? '#3b82f6' : '#e5e7eb'}
+              opacity={d.earnings > 0 ? 0.9 : 0.4}
             />
             <text
               x={x + BAR_W / 2} y={H + 16}
               textAnchor="middle"
               fontSize={10}
-              fill="hsl(var(--muted-foreground))"
+              fill="#6b7280"
             >
               {d.month}
             </text>
@@ -51,7 +48,7 @@ function EarningsChart({ data }: { data: { month: string; earnings: number }[] }
                 x={x + BAR_W / 2} y={y - 4}
                 textAnchor="middle"
                 fontSize={9}
-                fill="hsl(var(--accent))"
+                fill="#3b82f6"
                 fontWeight={600}
               >
                 ₦{(d.earnings / 1000).toFixed(0)}k
@@ -64,11 +61,10 @@ function EarningsChart({ data }: { data: { month: string; earnings: number }[] }
   );
 }
 
-// ── Rating trend (SVG line chart) ────────────────────────────────
 function RatingChart({ data }: { data: { month: string; rating: number }[] }) {
   const hasData = data.some((d) => d.rating > 0);
   if (!hasData) return (
-    <div className="flex items-center justify-center h-32 text-muted-foreground text-sm">
+    <div className="flex items-center justify-center h-32 text-gray-500 text-sm">
       No rating data yet
     </div>
   );
@@ -89,28 +85,25 @@ function RatingChart({ data }: { data: { month: string; rating: number }[] }) {
 
   return (
     <svg viewBox={`0 0 ${W} ${H + 24}`} className="w-full" style={{ height: 140 }}>
-      {/* Grid lines */}
       {[1, 2, 3, 4, 5].map((v) => {
         const y = H - ((v / 5) * (H - 10));
         return (
           <g key={v}>
-            <line x1={PAD_X} y1={y} x2={W - PAD_X} y2={y} stroke="hsl(var(--border))" strokeWidth={0.5} strokeDasharray="3 3" />
-            <text x={4} y={y + 4} fontSize={9} fill="hsl(var(--muted-foreground))">{v}★</text>
+            <line x1={PAD_X} y1={y} x2={W - PAD_X} y2={y} stroke="#f3f4f6" strokeWidth={1} />
+            <text x={4} y={y + 4} fontSize={9} fill="#9ca3af">{v}★</text>
           </g>
         );
       })}
 
-      {/* Line */}
       {pathD && (
-        <path d={pathD} fill="none" stroke="hsl(var(--primary))" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+        <path d={pathD} fill="none" stroke="#3b82f6" strokeWidth={3} strokeLinecap="round" strokeLinejoin="round" />
       )}
 
-      {/* Dots + labels */}
       {points.map((p) =>
         p.y !== null ? (
           <g key={p.month}>
-            <circle cx={p.x} cy={p.y!} r={4} fill="hsl(var(--primary))" />
-            <text x={p.x} y={H + 16} textAnchor="middle" fontSize={10} fill="hsl(var(--muted-foreground))">{p.month}</text>
+            <circle cx={p.x} cy={p.y!} r={5} fill="#ffffff" stroke="#3b82f6" strokeWidth={2} />
+            <text x={p.x} y={H + 16} textAnchor="middle" fontSize={10} fill="#6b7280">{p.month}</text>
           </g>
         ) : null
       )}
@@ -118,7 +111,6 @@ function RatingChart({ data }: { data: { month: string; rating: number }[] }) {
   );
 }
 
-// ── Trust score breakdown bar ────────────────────────────────────
 function ScoreBreakdown({ data }: { data: AnalyticsData }) {
   const components = [
     {
@@ -127,7 +119,7 @@ function ScoreBreakdown({ data }: { data: AnalyticsData }) {
       value:  Math.min(data.completedJobs, 50),
       max:    50,
       pts:    Math.round(Math.min((data.completedJobs / 50) * 40, 40)),
-      color:  'bg-primary',
+      color:  'bg-blue-500',
     },
     {
       label:  'Verified payments',
@@ -135,7 +127,7 @@ function ScoreBreakdown({ data }: { data: AnalyticsData }) {
       value:  Math.min(data.verifiedPayments, 50),
       max:    50,
       pts:    Math.round(Math.min((data.verifiedPayments / 50) * 30, 30)),
-      color:  'bg-accent',
+      color:  'bg-emerald-500',
     },
     {
       label:  'Average rating',
@@ -148,17 +140,17 @@ function ScoreBreakdown({ data }: { data: AnalyticsData }) {
   ];
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-5">
       {components.map((c) => (
         <div key={c.label}>
-          <div className="flex items-center justify-between text-sm mb-1.5">
-            <span className="text-muted-foreground">{c.label} <span className="text-xs">({c.weight})</span></span>
-            <span className="font-semibold text-foreground tabular-nums">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-sm text-gray-600">{c.label} <span className="text-xs text-gray-500">({c.weight})</span></span>
+            <span className="text-sm font-semibold text-gray-900 tabular-nums">
               {c.value}{c.label === 'Average rating' ? '/5.0' : `/${c.max}`}
-              <span className="text-xs text-muted-foreground ml-2">→ {c.pts} pts</span>
+              <span className="text-xs text-gray-500 ml-2">→ {c.pts} pts</span>
             </span>
           </div>
-          <div className="h-2 bg-muted rounded-full overflow-hidden">
+          <div className="h-3 bg-gray-100 rounded-full overflow-hidden">
             <div
               className={`h-full rounded-full transition-all duration-700 ${c.color}`}
               style={{ width: `${Math.round((c.value / c.max) * 100)}%` }}
@@ -168,15 +160,15 @@ function ScoreBreakdown({ data }: { data: AnalyticsData }) {
       ))}
 
       {data.disputeCount > 0 && (
-        <div className="flex items-center justify-between text-sm pt-1 border-t border-border text-destructive">
+        <div className="flex items-center justify-between text-sm pt-3 border-t border-gray-200 text-red-600">
           <span>Disputes (penalty)</span>
           <span className="font-semibold">−{Math.min(data.disputeCount * 5, 10)} pts</span>
         </div>
       )}
 
-      <div className="flex items-center justify-between pt-3 border-t border-border">
-        <span className="text-sm font-medium text-foreground">Trust score</span>
-        <span className="text-2xl font-extrabold text-accent">{data.trustScore}<span className="text-sm text-muted-foreground font-normal">/100</span></span>
+      <div className="flex items-center justify-between pt-3 border-t border-gray-200">
+        <span className="text-sm font-semibold text-gray-900">Trust score</span>
+        <span className="text-3xl font-bold text-blue-600">{data.trustScore}<span className="text-sm text-gray-500 font-normal ml-1">/100</span></span>
       </div>
     </div>
   );
@@ -200,24 +192,26 @@ export default function WorkerAnalyticsPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <svg className="w-8 h-8 animate-spin text-primary" fill="none" viewBox="0 0 24 24">
-          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
-          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
-        </svg>
-      </div>
+      <div className="flex items-center justify-center text-center py-16">
+          <div className="flex flex-col gap-3 items-center justify-center h-64">
+            <svg className="w-8 h-8 animate-spin text-primary" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+            </svg>
+            <p className="text-sm text-foreground/60">Loading your analytics...</p>
+          </div>
+        </div>
     );
   }
 
   if (error || !data) {
     return (
       <div className="text-center py-16">
-        <p className="text-muted-foreground">{error || 'No data available'}</p>
+        <p className="text-gray-500">{error || 'No data available'}</p>
       </div>
     );
   }
 
-  const h = new Date().getHours();
   const milestoneMsg =
     data.trustScore < 30 ? `Complete ${Math.max(0, 5 - data.completedJobs)} more job${data.completedJobs < 4 ? 's' : ''} to build your early reputation` :
     data.trustScore < 60 ? `${60 - data.trustScore} more points to reach Growing Credibility` :
@@ -225,85 +219,133 @@ export default function WorkerAnalyticsPage() {
     'You are a Top Rated worker — keep delivering excellent work';
 
   return (
-    <div className="max-w-4xl animate-fade-in space-y-6">
+    <div className="max-w-5xl space-y-8">
       {/* Header */}
-      <div>
-        <h1 className="text-3xl font-extrabold text-foreground mb-1">Analytics</h1>
-        <p className="text-muted-foreground text-sm">Your performance and financial credibility at a glance</p>
+      <div className="mb-8">
+         <p className="text-foreground font-semibold text-xl mb-1 capitalize">Analytics</p>
+          <p className="text-sm text-foreground/60">Your performance and financial credibility at a glance</p>
       </div>
 
-      {/* KPI cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        {[
-          { label: 'Trust score',    value: data.trustScore,    suffix: '/100', accent: true  },
-          { label: 'Total earned',   value: `₦${data.totalEarnings.toLocaleString('en-NG')}`,   suffix: '', accent: false },
-          { label: 'Jobs completed', value: data.completedJobs,    suffix: '',     accent: false },
-          { label: 'Avg rating',     value: data.averageRating > 0 ? data.averageRating.toFixed(1) : '—', suffix: '', accent: false },
-        ].map((s) => (
-          <div key={s.label} className={`rounded-xl p-4 border ${s.accent ? 'bg-accent/10 border-accent/20' : 'bg-card border-border'}`}>
-            <p className="text-label mb-1">{s.label}</p>
-            <p className={`text-2xl font-extrabold ${s.accent ? 'text-accent' : 'text-foreground'}`}>
-              {s.value}<span className="text-sm font-normal text-muted-foreground">{s.suffix}</span>
-            </p>
+      {/* KPI Cards Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Trust Score Card */}
+        <div className="bg-linear-to-br from-blue-50 to-blue-100 border border-blue-200 rounded-xl p-6 shadow-sm">
+          <div className="flex items-start justify-between">
+            <div>
+              <p className="text-sm font-medium text-blue-900 mb-2">Trust score</p>
+              <p className="text-3xl font-bold text-blue-600">{data.trustScore}</p>
+              <p className="text-xs text-blue-600 mt-1">/100</p>
+            </div>
+            <div className="w-10 h-10 bg-blue-200 rounded-lg flex items-center justify-center">
+              <Award size={20} className="text-blue-600" />
+            </div>
           </div>
-        ))}
+        </div>
+
+        {/* Total Earned Card */}
+        <div className="bg-linear-to-br from-emerald-50 to-emerald-100 border border-emerald-200 rounded-xl p-6 shadow-sm">
+          <div className="flex items-start justify-between">
+            <div>
+              <p className="text-sm font-medium text-emerald-900 mb-2">Total earned</p>
+              <p className="text-3xl font-bold text-emerald-600">₦{(data.totalEarnings / 1000).toFixed(0)}k</p>
+              <p className="text-xs text-emerald-600 mt-1">Verified</p>
+            </div>
+            <div className="w-10 h-10 bg-emerald-200 rounded-lg flex items-center justify-center">
+              <TrendingUp size={20} className="text-emerald-600" />
+            </div>
+          </div>
+        </div>
+
+        {/* Jobs Completed Card */}
+        <div className="bg-linear-to-br from-purple-50 to-purple-100 border border-purple-200 rounded-xl p-6 shadow-sm">
+          <div className="flex items-start justify-between">
+            <div>
+              <p className="text-sm font-medium text-purple-900 mb-2">Jobs completed</p>
+              <p className="text-3xl font-bold text-purple-600">{data.completedJobs}</p>
+              <p className="text-xs text-purple-600 mt-1">Verified</p>
+            </div>
+            <div className="w-10 h-10 bg-purple-200 rounded-lg flex items-center justify-center">
+              <BarChart3 size={20} className="text-purple-600" />
+            </div>
+          </div>
+        </div>
+
+        {/* Avg Rating Card */}
+        <div className="bg-linear-to-br from-amber-50 to-amber-100 border border-amber-200 rounded-xl p-6 shadow-sm">
+          <div className="flex items-start justify-between">
+            <div>
+              <p className="text-sm font-medium text-amber-900 mb-2">Avg rating</p>
+              <p className="text-3xl font-bold text-amber-600">{data.averageRating > 0 ? data.averageRating.toFixed(1) : '—'}</p>
+              <p className="text-xs text-amber-600 mt-1">/5.0 stars</p>
+            </div>
+            <div className="w-10 h-10 bg-amber-200 rounded-lg flex items-center justify-center">
+              <Target size={20} className="text-amber-600" />
+            </div>
+          </div>
+        </div>
       </div>
 
-      {/* Earnings chart */}
-      <div className="bg-card border border-border rounded-xl p-6">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-sm font-semibold text-foreground">Monthly earnings</h2>
-          <span className="text-xs text-muted-foreground">Last 6 months</span>
+      {/* Earnings Chart */}
+      <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h2 className="text-lg font-semibold text-gray-900">Monthly earnings</h2>
+            <p className="text-sm text-gray-500 mt-1">Last 6 months performance</p>
+          </div>
+          <span className="text-xs font-medium bg-blue-100 text-blue-700 px-3 py-1 rounded-full">Last 6 months</span>
         </div>
         {data.monthly.some((m) => m.earnings > 0) ? (
           <EarningsChart data={data.monthly} />
         ) : (
-          <div className="flex items-center justify-center h-32 text-muted-foreground text-sm">
+          <div className="flex items-center justify-center h-32 text-gray-500 text-sm">
             No earnings data yet — complete your first paid job
           </div>
         )}
       </div>
 
-      {/* Trust score breakdown */}
-      <div className="bg-card border border-border rounded-xl p-6">
-        <h2 className="text-sm font-semibold text-foreground mb-5">Trust score breakdown</h2>
+      {/* Trust Score Breakdown */}
+      <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+        <h2 className="text-lg font-semibold text-gray-900 mb-6">Trust score breakdown</h2>
         <ScoreBreakdown data={data} />
       </div>
 
-      {/* Rating trend */}
-      <div className="bg-card border border-border rounded-xl p-6">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-sm font-semibold text-foreground">Rating trend</h2>
-          <span className="text-xs text-muted-foreground">Last 6 months</span>
+      {/* Rating Trend */}
+      <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h2 className="text-lg font-semibold text-gray-900">Rating trend</h2>
+            <p className="text-sm text-gray-500 mt-1">How your ratings have evolved</p>
+          </div>
+          <span className="text-xs font-medium bg-blue-100 text-blue-700 px-3 py-1 rounded-full">Last 6 months</span>
         </div>
         <RatingChart data={data.ratingTrend} />
       </div>
 
-      {/* Milestone card */}
-      <div className="bg-primary/5 border border-primary/20 rounded-xl p-5 flex items-start gap-4">
-        <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-          <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-          </svg>
-        </div>
-        <div>
-          <p className="text-sm font-semibold text-foreground mb-1">Next milestone</p>
-          <p className="text-sm text-muted-foreground">{milestoneMsg}</p>
+      {/* Milestone Card */}
+      <div className="bg-linear-to-r from-blue-600 to-blue-700 rounded-xl p-6 text-white shadow-sm">
+        <div className="flex items-start gap-4">
+          <div className="w-12 h-12 rounded-lg bg-white/20 flex items-center justify-center shrink-0">
+            <TrendingUp size={24} className="text-white" />
+          </div>
+          <div className="flex-1">
+            <p className="font-semibold mb-2">Next milestone</p>
+            <p className="text-sm text-blue-100">{milestoneMsg}</p>
+          </div>
         </div>
       </div>
 
-      {/* Quick links */}
-      <div className="flex gap-3">
+      {/* Quick Action Links */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pb-4">
         <Link href="/dashboard/worker/jobs"
-          className="flex-1 h-10 bg-primary text-primary-foreground rounded-lg text-sm font-semibold flex items-center justify-center hover:bg-primary/90 transition-all">
+          className="flex items-center justify-center h-11 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-700 transition-colors shadow-sm">
           View jobs
         </Link>
         <Link href="/dashboard/worker/payments"
-          className="flex-1 h-10 border border-border bg-card text-foreground rounded-lg text-sm font-semibold flex items-center justify-center hover:bg-muted transition-all">
+          className="flex items-center justify-center h-11 border border-gray-300 bg-white text-gray-900 rounded-lg text-sm font-semibold hover:bg-gray-50 transition-colors shadow-sm">
           View payments
         </Link>
         <Link href="/dashboard/worker/reviews"
-          className="flex-1 h-10 border border-border bg-card text-foreground rounded-lg text-sm font-semibold flex items-center justify-center hover:bg-muted transition-all">
+          className="flex items-center justify-center h-11 border border-gray-300 bg-white text-gray-900 rounded-lg text-sm font-semibold hover:bg-gray-50 transition-colors shadow-sm">
           View reviews
         </Link>
       </div>

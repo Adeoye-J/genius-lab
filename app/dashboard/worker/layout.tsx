@@ -78,10 +78,6 @@ function Sidebar({ userName, onLogout }: { userName: string; onLogout: () => voi
                   ? 'bg-primary text-white'
                   : 'hover:bg-primary/70 hover:text-white'
                 }`}
-              // style={{
-              //   background: isActive ? 'hsl(var(--sidebar-accent))' : undefined,
-              //   color: isActive ? 'hsl(var(--sidebar-primary-foreground))' : 'hsl(var(--sidebar-foreground) / 0.8)',
-              // }}
             >
               {item.icon}
               {item.label}
@@ -99,7 +95,7 @@ function Sidebar({ userName, onLogout }: { userName: string; onLogout: () => voi
             </span>
           </div>
           <div className="min-w-0">
-            <p className="flex text-sm font-semibold text-primary truncate capitalize">{userName}</p>
+            <p className="text-sm font-semibold text-primary truncate capitalize">{userName}</p>
             <p className="text-xs">Worker</p>
           </div>
         </div>
@@ -133,7 +129,7 @@ export default function WorkerDashboardLayout({ children }: { children: React.Re
   }
 
   return (
-    <div className="flex min-h-screen bg-background">
+    <div className="flex h-screen overflow-hidden bg-background">
       {/* Desktop sidebar */}
       <div className="hidden lg:block shrink-0">
         <Sidebar userName={userName} onLogout={handleLogout} />
@@ -150,7 +146,7 @@ export default function WorkerDashboardLayout({ children }: { children: React.Re
       )}
 
       {/* Main content */}
-      <div className="flex-1 flex flex-col min-w-0">
+      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         {/* Mobile topbar */}
         <div className="lg:hidden flex items-center gap-4 px-4 py-3 border-b border-border bg-card">
           <button onClick={() => setMobileOpen(true)} className="p-1 text-muted-foreground hover:text-foreground cursor-pointer">
@@ -160,7 +156,7 @@ export default function WorkerDashboardLayout({ children }: { children: React.Re
           <NotificationsBell />
         </div>
 
-        <main className="flex-1 p-6 lg:p-8 overflow-auto">
+        <main className="flex-1 p-6 lg:p-8 overflow-y-auto">
           {children}
         </main>
       </div>

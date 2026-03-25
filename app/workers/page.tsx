@@ -3,6 +3,9 @@
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { WORKER_PROFESSIONS, NIGERIAN_STATES } from '@/config/constants';
+import { Map, Verified } from 'lucide-react';
+import { useAuth } from '@/hooks/useAuth';
+
 
 interface Worker {
   _id: string;
@@ -45,65 +48,122 @@ function Stars({ rating }: { rating: number }) {
 }
 
 function WorkerCard({ worker }: { worker: Worker }) {
-  const initials = worker.userId.name.split(' ').map((n) => n[0]).join('').slice(0, 2).toUpperCase();
+  const initials = worker.userId.name
+    .split(' ')
+    .map((n) => n[0])
+    .join('')
+    .slice(0, 2)
+    .toUpperCase();
+
   return (
-    <div className="bg-card border border-border rounded-xl p-5 hover:border-primary/40 hover:shadow-sm transition-all flex flex-col gap-4">
-      {/* Header */}
-      <div className="flex items-start gap-3">
-        <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-          <span className="text-primary font-bold text-sm">{initials}</span>
-        </div>
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 flex-wrap">
-            <p className="font-semibold text-foreground text-sm">{worker.userId.name}</p>
-            {worker.isAvailable && (
-              <span className="text-xs bg-accent/10 text-accent px-2 py-0.5 rounded-full font-medium">Available</span>
-            )}
+    <div className="w-[320px] bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-100">
+      
+      {/* Top Section */}
+      <div className="relative bg-linear-to-b from-accent/80 to-accent/90 h-48 flex items-center justify-center">
+        
+        {/* Profile Image / Initials */}
+        {worker.userId.profileImage ? (
+          <img
+            src={worker.userId.profileImage}
+            alt={worker.userId.name}
+            className="w-28 h-28 rounded-full object-cover border-4 border-white/20"
+          />
+        ) : (
+          <div className="w-28 h-28 rounded-full bg-white/20 flex items-center justify-center text-white text-xl font-bold">
+            {initials}
           </div>
-          <p className="text-muted-foreground text-xs mt-0.5">{worker.profession}</p>
-          <p className="text-muted-foreground text-xs">{worker.location.city}, {worker.location.state}</p>
+        )}
+
+        {/* Availability Badge */}
+        <div
+          className={`absolute top-3 right-3 text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1 ${
+            worker.isAvailable
+              ? 'bg-white text-primary'
+              : 'bg-gray-200 text-gray-600'
+          }`}
+        >
+          <Verified size={16} />
+          {worker.isAvailable ? 'Available' : 'Unavailable'}
         </div>
-        <TrustBadge score={worker.trustScore} />
       </div>
 
-      {/* Bio */}
-      {worker.bio && (
-        <p className="text-sm text-muted-foreground line-clamp-2">{worker.bio}</p>
-      )}
+      {/* Content */}
+      <div className="p-5 space-y-4">
+        
+        {/* Name + Rating */}
+        <div className="flex items-start justify-between">
+          <div>
+            <h3 className="font-semibold text-lg text-gray-900 capitalize">
+              {worker.userId.name}
+            </h3>
+            <p className="text-sm text-gray-500">
+              {worker.profession}
+            </p>
+            <p className="text-xs text-gray-400">
+              {worker.location.city}, {worker.location.state}
+            </p>
+          </div>
 
-      {/* Skills */}
-      {worker.skills.length > 0 && (
-        <div className="flex flex-wrap gap-1.5">
-          {worker.skills.slice(0, 4).map((skill) => (
-            <span key={skill} className="text-xs bg-muted text-muted-foreground px-2 py-0.5 rounded-md">
-              {skill}
-            </span>
-          ))}
-          {worker.skills.length > 4 && (
-            <span className="text-xs text-muted-foreground">+{worker.skills.length - 4} more</span>
-          )}
-        </div>
-      )}
-
-      {/* Stats + CTA */}
-      <div className="flex items-center justify-between mt-auto pt-3 border-t border-border">
-        <div className="flex items-center gap-3">
-          {worker.averageRating > 0 ? (
-            <div className="flex items-center gap-1">
+          {/* Rating */}
+          {worker.averageRating > 0 && (
+            <div className="flex items-center gap-1 bg-gray-100 px-2 py-1 rounded-md text-sm font-medium">
               <Stars rating={worker.averageRating} />
-              <span className="text-xs text-muted-foreground">{worker.averageRating.toFixed(1)}</span>
+              <span>{worker.averageRating.toFixed(1)}</span>
             </div>
-          ) : (
-            <span className="text-xs text-muted-foreground">No reviews yet</span>
           )}
-          <span className="text-xs text-muted-foreground">{worker.totalJobsCompleted} jobs done</span>
         </div>
-        <Link
-          href={`/workers/${worker._id}`}
-          className="text-xs font-semibold text-primary hover:text-primary/80 transition-colors"
-        >
-          View profile →
-        </Link>
+
+        {/* Skills */}
+        {worker.skills.length > 0 && (
+          <div className="flex flex-wrap gap-1.5">
+            {worker.skills.slice(0, 3).map((skill) => (
+              <span
+                key={skill}
+                className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-md"
+              >
+                {skill}
+              </span>
+            ))}
+            {worker.skills.length > 4 && (
+              <span className="text-xs text-gray-400">
+                +{worker.skills.length - 4} more
+              </span>
+            )}
+          </div>
+        )}
+
+        {/* Trust Score */}
+        <div>
+          <div className="flex justify-between items-center mb-1">
+            <span className="text-xs font-semibold text-gray-500">
+              TRUST SCORE
+            </span>
+            
+            {/* Your TrustBadge */}
+            <TrustBadge score={worker.trustScore} />
+          </div>
+
+          <div className="w-full h-2 bg-gray-200 rounded-full">
+            <div
+              className="h-2 bg-accent rounded-full transition-all duration-500"
+              style={{ width: `${worker.trustScore}%` }}
+            />
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="flex items-center justify-between pt-2">
+          <span className="text-xs text-gray-500">
+            {worker.totalJobsCompleted} jobs completed
+          </span>
+
+          <Link
+            href={`/workers/${worker._id}`}
+            className="bg-blue-900 text-white text-sm font-semibold px-4 py-2 rounded-full hover:bg-blue-800 transition"
+          >
+            View Profile
+          </Link>
+        </div>
       </div>
     </div>
   );
@@ -117,6 +177,8 @@ export default function WorkersPage() {
   const [city, setCity]             = useState('');
   const [page, setPage]             = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+
+  const {user} = useAuth()
 
   const fetchWorkers = useCallback(async () => {
     setLoading(true);
@@ -143,15 +205,23 @@ export default function WorkersPage() {
       {/* Top nav */}
       <nav className="border-b border-border bg-card px-6 py-4 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2">
-          <div className="w-7 h-7 bg-primary rounded-lg flex items-center justify-center">
-            <span className="text-white font-bold text-xs">S</span>
+          <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center text-white">
+            <Map />
           </div>
           <span className="font-bold text-foreground">StreetCred</span>
         </Link>
-        <div className="flex gap-3">
-          <Link href="/login"    className="text-sm text-muted-foreground hover:text-foreground transition-colors">Sign in</Link>
-          <Link href="/register" className="text-sm font-semibold text-primary hover:text-primary/80 transition-colors">Join free</Link>
-        </div>
+        {
+          user ? (
+            <div className="">
+              <Link href="/dashboard/customer" className="text-sm font-semibold text-white transition-colors bg-primary hover:bg-primary/80 py-3 px-4 rounded-lg duration-500">Go to Dashboard</Link>
+            </div>
+          ) : (
+            <div className="flex gap-3 items-center">
+              <Link href="/login"    className="text-sm text-muted-foreground hover:text-foreground transition-colors">Sign in</Link>
+              <Link href="/register" className="text-sm font-semibold text-white transition-colors bg-primary hover:bg-primary/80 py-3 px-4 rounded-lg duration-500">Join free</Link>
+            </div>
+          )
+        }
       </nav>
 
       <div className="max-w-6xl mx-auto px-4 py-10">
@@ -199,19 +269,22 @@ export default function WorkersPage() {
 
         {/* Results */}
         {loading ? (
-          <div className="flex items-center justify-center h-48">
+          <div className="flex items-center justify-center text-center py-16">
+          <div className="flex flex-col gap-3 items-center justify-center h-64">
             <svg className="w-8 h-8 animate-spin text-primary" fill="none" viewBox="0 0 24 24">
-              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
-              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
             </svg>
+            <p className="text-sm text-foreground/60">Loading available workers...</p>
           </div>
+        </div>
         ) : workers.length === 0 ? (
           <div className="text-center py-16 text-muted-foreground">
             <p className="text-lg font-semibold mb-2">No workers found</p>
             <p className="text-sm">Try adjusting your filters</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 max-sm:place-items-center">
             {workers.map((w) => <WorkerCard key={w._id} worker={w} />)}
           </div>
         )}

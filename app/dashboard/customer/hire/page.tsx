@@ -1,11 +1,13 @@
 import HireClient from './HireClient';
 
-export default function HirePage({
+export default async function HirePage({
   searchParams,
 }: {
   searchParams: { workerId?: string };
 }) {
-  const preselectedWorkerId = searchParams.workerId ?? '';
+
+  const {workerId} = await searchParams
+  const preselectedWorkerId = workerId ?? '';
 
   return <HireClient preselectedWorkerId={preselectedWorkerId} />;
 }

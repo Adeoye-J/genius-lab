@@ -5,7 +5,8 @@ export default function LoginPage({
 }: {
   searchParams: { redirect?: string };
 }) {
-  const redirectTo = searchParams.redirect ?? '';
+  const {redirect} = searchParams
+  const redirectTo = redirect ?? '';
 
   return <LoginClient redirectTo={redirectTo} />;
 }

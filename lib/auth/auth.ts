@@ -23,7 +23,7 @@ export interface AuthUser {
  * Use in:
  *  - API route handlers (to protect endpoints)
  *  - Server Components (to render auth-aware UI)
- *  - middleware.ts (indirectly via /api/auth/me)
+ *  - proxy.ts (indirectly via /api/auth/me)
  */
 export async function getCurrentUser(): Promise<AuthUser | null> {
   const token = await getSessionToken();

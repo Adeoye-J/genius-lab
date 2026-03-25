@@ -92,6 +92,7 @@ export interface VerifyResult {
   paymentReference: string;
   retrievalRef:     string;
   transactionDate:  string;
+  raw:              Record<string, unknown>; // full response for debugging
 }
 
 // ── Token cache ───────────────────────────────────────────────────
@@ -214,9 +215,13 @@ export async function verifyTransaction(
     throw new Error(`[Interswitch] Verify failed (${res.status}): ${text}`);
   }
 
-  const data = await res.json();
+  const data = await res.json() as Record<string, unknown>;
 
-  const responseCode = data.ResponseCode ?? data.responseCode ?? '';
+  if (!env.isProd) {
+    console.log('[Interswitch] Verify response:', JSON.stringify(data, null, 2));
+  }
+
+  const responseCode = String(data.ResponseCode ?? data.responseCode ?? '');
   const returnedAmount = Number(data.Amount ?? 0);
 
   // '00' = Approved by Financial Institution
@@ -226,31 +231,79 @@ export async function verifyTransaction(
   // Interswitch returns amount in kobo
   const amountMatches = returnedAmount === expectedAmountKobo;
 
-  let status: VerifyResult['status'];
-  if (approved && amountMatches) {
-    status = 'successful';
-  } else if (approved && !amountMatches) {
-    // Approved but wrong amount — possible tampering, treat as failed
-    console.error(
-      `[Interswitch] Amount mismatch on ${transactionRef}: ` +
-      `expected ${expectedAmountKobo} kobo, got ${returnedAmount} kobo`
-    );
-    status = 'failed';
-  } else {
-    // Non-00 codes that are terminal failures
-    const failedCodes = ['01', 'Z6', 'T1', '05', '51', '54', '57', '61', '62', '91'];
-    status = failedCodes.includes(responseCode) ? 'failed' : 'pending';
-  }
+  // let status: VerifyResult['status'];
+  // if (approved && amountMatches) {
+  //   status = 'successful';
+  // } else if (approved && !amountMatches) {
+  //   // Approved but wrong amount — possible tampering, treat as failed
+  //   console.error(
+  //     `[Interswitch] Amount mismatch on ${transactionRef}: ` +
+  //     `expected ${expectedAmountKobo} kobo, got ${returnedAmount} kobo`
+  //   );
+  //   status = 'failed';
+  // } else {
+  //   // Non-00 codes that are terminal failures
+  //   const failedCodes = ['01', 'Z6', 'T1', '05', '51', '54', '57', '61', '62', '91'];
+  //   status = failedCodes.includes(responseCode) ? 'failed' : 'pending';
+  // }
 
+  // return {
+  //   transactionRef,
+  //   status,
+  //   amountKobo:       returnedAmount,
+  //   amountNGN:        Math.round(returnedAmount / 100),
+  //   responseCode,
+  //   responseMessage:  data.ResponseDescription ?? data.responseDescription ?? '',
+  //   paymentReference: data.PaymentReference ?? '',
+  //   retrievalRef:     data.RetrievalReferenceNumber ?? '',
+  //   transactionDate:  data.TransactionDate ?? '',
+  // };
+
+  // Amount mismatch handling
+  if (approved && !amountMatches) {
+    if (env.isProd) {
+      // Hard failure in production — possible tampering
+      console.error(
+        `[Interswitch] AMOUNT MISMATCH on ${transactionRef}: ` +
+        `expected ${expectedAmountKobo} kobo, got ${returnedAmount} kobo`
+      );
+      return buildResult(data, transactionRef, 'failed', returnedAmount);
+    } else {
+      // QA sandbox returns inconsistent amounts — log warning but allow
+      console.warn(
+        `[Interswitch] QA amount mismatch on ${transactionRef}: ` +
+        `expected ${expectedAmountKobo}, got ${returnedAmount} — allowing in non-prod`
+      );
+    }
+  }
+ 
+  // Terminal failure codes from Interswitch docs
+  const failedCodes = ['01', 'Z6', 'T1', '05', '51', '54', '57', '61', '62', '91'];
+ 
+  const status: VerifyResult['status'] =
+    approved         ? 'successful' :
+    failedCodes.includes(responseCode) ? 'failed' :
+    'pending';
+ 
+  return buildResult(data, transactionRef, status, returnedAmount);
+}
+
+function buildResult(
+  data: Record<string, unknown>,
+  transactionRef: string,
+  status: VerifyResult['status'],
+  amountKobo: number
+): VerifyResult {
   return {
     transactionRef,
     status,
-    amountKobo:       returnedAmount,
-    amountNGN:        Math.round(returnedAmount / 100),
-    responseCode,
-    responseMessage:  data.ResponseDescription ?? data.responseDescription ?? '',
-    paymentReference: data.PaymentReference ?? '',
-    retrievalRef:     data.RetrievalReferenceNumber ?? '',
-    transactionDate:  data.TransactionDate ?? '',
+    amountKobo,
+    amountNGN:        Math.round(amountKobo / 100),
+    responseCode:     String(data.ResponseCode   ?? data.responseCode   ?? ''),
+    responseMessage:  String(data.ResponseDescription ?? data.responseDescription ?? ''),
+    paymentReference: String(data.PaymentReference ?? ''),
+    retrievalRef:     String(data.RetrievalReferenceNumber ?? ''),
+    transactionDate:  String(data.TransactionDate ?? ''),
+    raw:              data,
   };
 }
