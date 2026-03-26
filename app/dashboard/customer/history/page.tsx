@@ -58,12 +58,8 @@ export default function CustomerHistoryPage() {
     <div className="max-w-4xl">
       {/* HEADER */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-          Your jobs
-        </h1>
-        <p className="text-gray-500 text-sm mt-1">
-          Track and manage all your requests
-        </p>
+         <p className="text-foreground font-semibold text-xl mb-1 capitalize">Your jobs</p>
+          <p className="text-sm text-foreground/60">Track and manage all your requests</p>
       </div>
 
       {/* LOADING */}

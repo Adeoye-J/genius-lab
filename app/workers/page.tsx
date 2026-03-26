@@ -108,7 +108,7 @@ function WorkerCard({ worker }: { worker: Worker }) {
           {worker.averageRating > 0 && (
             <div className="flex items-center gap-1 bg-gray-100 px-2 py-1 rounded-md text-sm font-medium">
               <Stars rating={worker.averageRating} />
-              <span>{worker.averageRating.toFixed(1)}</span>
+              <span className='text-gray-700'>{worker.averageRating.toFixed(1)}</span>
             </div>
           )}
         </div>

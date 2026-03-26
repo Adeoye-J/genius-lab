@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import {ClipboardCheck, Landmark, Map, Route, ShieldCheck, TrafficCone} from "lucide-react"
+import Link from 'next/link';
 
 export const metadata: Metadata = { title: 'Auth' };
 
@@ -9,12 +10,12 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
       {/* Left panel — branding */}
       <div className="hidden lg:flex lg:w-1/2 gradient-primary flex-col justify-between p-12">
         <div className='space-y-8'>
-          <div className="flex items-center gap-3 mb-16">
+          <Link className="flex items-center gap-3 mb-16 cursor-pointer" href={"/"}>
             <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
               <Map className='text-white' />
             </div>
             <span className="text-white font-bold text-2xl tracking-tight">StreetCred</span>
-          </div>
+          </Link>
 
           <h1 className="font-extrabold text-white leading-tight text-4xl xl:text-5xl">
             Your journey to<br /> financial freedom<br /> starts here.
@@ -84,12 +85,12 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
       <div className="flex-1 flex items-center justify-center p-6 lg:p-12">
         <div className="w-full max-w-md">
           {/* Mobile logo */}
-          <div className="flex items-center justify-center gap-2 mb-8 lg:hidden">
+          <Link className="flex items-center justify-center gap-2 mb-8 lg:hidden cursor-pointer" href={"/"}>
             <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
               <Map className='text-white' />
             </div>
             <span className="text-foreground font-bold text-lg">StreetCred</span>
-          </div>
+          </Link>
 
           {children}
         </div>

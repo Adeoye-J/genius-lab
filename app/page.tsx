@@ -22,7 +22,7 @@ function NavCTA({ isLoggedIn, role }: {isLoggedIn: boolean, role: string | null}
       <Link href="/login" className="hidden sm:block px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
         Sign in
       </Link>
-      <Link href="/register" className="px-5 py-2.5 rounded-full text-sm font-semibold bg-primary text-primary-foreground hover:bg-primary/90 transition-all active:scale-95">
+      <Link href="/register" className="px-5 py-2.5 rounded-full text-sm font-semibold bg-primary text-white hover:bg-primary/90 transition-all active:scale-95">
         Get started free
       </Link>
     </div>
@@ -115,7 +115,7 @@ export default function LandingPage() {
 
             {/* Desktop nav */}
             <nav className="hidden md:flex items-center gap-6">
-              {['How it works', 'Features', 'Dashboard', 'Testimonials'].map(label => (
+              {['How it works', 'Features', 'Preview'].map(label => (
                 <Link key={label} href={`#${label.toLowerCase().replace(' ', '-')}`} className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
                   {label}
                 </Link>
@@ -149,7 +149,7 @@ export default function LandingPage() {
 
         {/* ── HERO ───────────────────────────────────────────────── */}
         <motion.section
-          className="hero-bg pt-32 pb-20 px-5 relative overflow-hidden"
+          className="hero-bg pt-32 px-5 relative overflow-hidden"
           style={{ minHeight: '100vh', display: 'flex', alignItems: 'center' }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -303,7 +303,7 @@ export default function LandingPage() {
         {/* ── HOW IT WORKS ───────────────────────────────────────── */}
         <motion.section
           id="how-it-works"
-          className="pb-24 px-5"
+          className="py-24 px-5"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
@@ -312,7 +312,7 @@ export default function LandingPage() {
             <div className="text-center mb-16">
               <p className="text-xs font-semibold text-accent uppercase tracking-widest mb-3">How it works</p>
               <h2 className="text-3xl md:text-4xl font-display mb-4">
-                Three steps to your <span className="gradient-text">financial identity</span>
+                Three steps to your <span className="gradient-text text-accent">financial identity</span>
               </h2>
               <p className="text-muted-foreground max-w-md mx-auto">
                 From invisible worker to credible entrepreneur — the journey starts with a single job.
@@ -410,7 +410,7 @@ export default function LandingPage() {
 
         {/* ── DASHBOARD PREVIEW ──────────────────────────────────── */}
         <motion.section
-          id="dashboard"
+          id="preview"
           className="py-24 px-5"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -560,7 +560,7 @@ export default function LandingPage() {
                 )}
               </Link>
               {!isLoggedIn && (
-                <Link href="/register?role=customer" className="px-6 py-3.5 rounded-full text-sm font-bold border border-white/30 hover:bg-white/10 active:scale-95 transition-all">
+                <Link href="/workers" className="px-6 py-3.5 rounded-full text-white text-sm font-bold border border-white/30 hover:bg-white/10 active:scale-95 transition-all">
                   Hire a Worker
                 </Link>
               )}
@@ -580,7 +580,7 @@ export default function LandingPage() {
                 <div className="flex items-center gap-2 mb-3">
                   <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: 'linear-gradient(135deg, hsl(221 66% 47%), hsl(221 68% 38%))' }}>
                     {/* <span className="text-white font-bold text-xs">S</span> */}
-                    <Map size={16} />
+                    <Map size={16} className='text-white' />
                   </div>
                   <span className="font-bold text-foreground">StreetCred</span>
                 </div>
