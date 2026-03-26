@@ -11,7 +11,7 @@ function NavCTA({ isLoggedIn, role }: {isLoggedIn: boolean, role: string | null}
   if (isLoggedIn) {
     const href = role === 'worker' ? '/dashboard/worker' : '/dashboard/customer';
     return (
-      <Link href={href} className="px-5 py-2.5 rounded-full text-sm font-semibold bg-accent text-accent-foreground hover:bg-accent/90 transition-all active:scale-95 flex items-center gap-2">
+      <Link href={href} className="px-5 py-2.5 rounded-full text-xs md:text-sm font-semibold bg-accent text-accent-foreground hover:bg-accent/90 transition-all active:scale-95 flex items-center gap-2">
         <span className="w-2 h-2 rounded-full bg-accent-foreground/80 animate-pulse" />
         Dashboard
       </Link>
@@ -19,7 +19,7 @@ function NavCTA({ isLoggedIn, role }: {isLoggedIn: boolean, role: string | null}
   }
   return (
     <div className="flex items-center gap-2">
-      <Link href="/login" className="px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+      <Link href="/login" className="hidden sm:block px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
         Sign in
       </Link>
       <Link href="/register" className="px-5 py-2.5 rounded-full text-sm font-semibold bg-primary text-primary-foreground hover:bg-primary/90 transition-all active:scale-95">
@@ -62,7 +62,7 @@ export default function LandingPage() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userRole, setUserRole] = useState(null);
   const [dashTab, setDashTab] = useState('worker');
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  // const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -96,21 +96,21 @@ export default function LandingPage() {
 
         {/* ── NAVBAR ─────────────────────────────────────────────── */}
         <motion.header
-          className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
+          className="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-[rgba(249,250,251)] dark:bg-background border-b border-[hsl(213 27% 84%)] shadow-lg"
           initial={{ opacity: 0, y: -100 }}
           animate={{ opacity: 1, y: 0 }}
-          style={{
-            background: scrolled ? 'rgba(249,250,251,0.95)' : 'transparent',
-            backdropFilter: scrolled ? 'blur(12px)' : 'none',
-            borderBottom: scrolled ? '1px solid hsl(213 27% 84%)' : 'none',
-          }}
+          // style={{
+          //   background: scrolled ? 'rgba(249,250,251,0.95)' : 'transparent',
+          //   backdropFilter: scrolled ? 'blur(12px)' : 'none',
+          //   borderBottom: scrolled ? '1px solid hsl(213 27% 84%)' : 'none',
+          // }}
         >
           <div className="max-w-6xl mx-auto px-5 h-16 flex items-center justify-between">
-            <Link href="/" className="flex items-center gap-2.5">
-              <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: 'linear-gradient(135deg, hsl(221 66% 47%), hsl(221 68% 38%))' }}>
-                <Map className='text-white' />
+            <Link href="/" className="flex items-center gap-1 md:gap-2.5">
+              <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: 'linear-gradient(135deg, hsl(221 66% 47%), hsl(221 68% 38%))' }}>
+                <Map size={16} className='text-white' />
               </div>
-              <span className="font-bold text-lg text-foreground tracking-tight">StreetCred</span>
+              <span className="font-bold text-base md:text-lg text-foreground tracking-tight">StreetCred</span>
             </Link>
 
             {/* Desktop nav */}
@@ -124,7 +124,7 @@ export default function LandingPage() {
 
             <div className="flex items-center gap-3">
               <NavCTA isLoggedIn={isLoggedIn} role={userRole} />
-              <button className="md:hidden p-2 text-muted-foreground hover:text-foreground" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+              {/* <button className="md:hidden p-2 text-muted-foreground hover:text-foreground" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   {mobileMenuOpen ? (
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -132,11 +132,11 @@ export default function LandingPage() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                   )}
                 </svg>
-              </button>
+              </button> */}
             </div>
           </div>
 
-          {mobileMenuOpen && (
+          {/* {mobileMenuOpen && (
             <div className="md:hidden border-t border-border bg-card/95 backdrop-blur-md">
               {['How it works', 'Features', 'Dashboard', 'Testimonials'].map(label => (
                 <Link key={label} href={`#${label.toLowerCase().replace(' ', '-')}`} onClick={() => setMobileMenuOpen(false)} className="block px-5 py-3 text-sm font-medium text-foreground border-b border-border last:border-0">
@@ -144,7 +144,7 @@ export default function LandingPage() {
                 </Link>
               ))}
             </div>
-          )}
+          )} */}
         </motion.header>
 
         {/* ── HERO ───────────────────────────────────────────────── */}
@@ -162,11 +162,11 @@ export default function LandingPage() {
               <div>
                 <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-border bg-card text-xs font-medium text-muted-foreground mb-6">
                   <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                  12,000+ workers building their financial identity
+                  Build your financial identity today
                 </div>
 
-                <h1 className="font-display hero-headline mb-6 leading-[1.05]" style={{ fontSize: 'clamp(2.8rem, 5.5vw, 4.2rem)' }}>
-                  Your work builds <em className="gradient-text not-italic">your credit.</em>
+                <h1 className="font-display hero-headline mb-6 leading-[1.05]" style={{ fontSize: 'clamp(2.8rem, 4.5vw, 4.2rem)' }}>
+                  The Trusted Financial Identity for <em className="text-accent gradient-text not-italic">Every Worker</em>
                 </h1>
 
                 <p className="text-base md:text-lg text-muted-foreground leading-relaxed mb-8" style={{ fontFamily: 'var(--font-body)' }}>
@@ -174,18 +174,16 @@ export default function LandingPage() {
                 </p>
 
                 <div className="flex flex-wrap gap-3 mb-10">
-                  <Link href={isLoggedIn ? (userRole === 'worker' ? '/dashboard/worker' : '/dashboard/customer') : '/register'} className="px-6 py-3.5 rounded-full text-sm font-semibold text-white btn-pulse inline-flex items-center gap-2 transition-all hover:opacity-90 active:scale-95" style={{ background: 'linear-gradient(135deg, hsl(160 84% 39%), hsl(160 84% 30%))' }}>
-                    {isLoggedIn ? '→ Go to Dashboard' : 'Build my identity free'}
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                    </svg>
+                  <Link href={isLoggedIn ? (userRole === 'worker' ? '/dashboard/worker' : '/dashboard/customer') : '/register'} className="group px-6 py-3.5 rounded-full text-sm font-semibold text-white btn-pulse inline-flex items-center gap-2 transition-all hover:opacity-90 active:scale-95" style={{ background: 'linear-gradient(135deg, hsl(160 84% 39%), hsl(160 84% 30%))' }}>
+                    {isLoggedIn ? 'Go to Dashboard' : 'Build my identity free'}
+                    <ArrowRight size={16} className='group-hover:translate-x-2 duration-300 transition-all' />
                   </Link>
                   <Link href="#how-it-works" className="px-6 py-3.5 rounded-full text-sm font-semibold border border-border bg-card text-foreground hover:border-primary transition-all inline-flex items-center gap-2">
                     See how it works
                   </Link>
                 </div>
 
-                <div className="flex items-center gap-6">
+                {/* <div className="flex items-center gap-6">
                   <div className="flex -space-x-2">
                     {['CE', 'NA', 'BL', 'TO', 'GF'].map((init, i) => (
                       <div key={i} className="w-8 h-8 rounded-full border-2 border-background flex items-center justify-center text-xs font-bold text-white" style={{ background: `hsl(${220 + i * 15} 60% ${35 + i * 8}%)` }}>
@@ -197,7 +195,7 @@ export default function LandingPage() {
                     <p className="text-sm font-semibold text-foreground">Trusted by 12,000+ workers</p>
                     <p className="text-xs text-muted-foreground">across Lagos, Abuja, PH & beyond</p>
                   </div>
-                </div>
+                </div> */}
               </div>
 
               {/* Right — hero visual */}
@@ -276,7 +274,7 @@ export default function LandingPage() {
         </motion.section>
 
         {/* ── STATS ──────────────────────────────────────────────── */}
-        <motion.section
+        {/* <motion.section
           className="py-16 px-5 border-y border-border bg-card"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -300,12 +298,12 @@ export default function LandingPage() {
               </motion.div>
             ))}
           </div>
-        </motion.section>
+        </motion.section> */}
 
         {/* ── HOW IT WORKS ───────────────────────────────────────── */}
         <motion.section
           id="how-it-works"
-          className="py-24 px-5"
+          className="pb-24 px-5"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
@@ -323,7 +321,7 @@ export default function LandingPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative">
               {/* Connector line */}
-              <div className="hidden md:block absolute top-12 left-1/6 right-1/6 h-px bg-linear-to-r from-transparent via-border to-transparent" />
+              <div className="hidden -z-10 md:block absolute top-12 left-1/6 right-1/6 h-0.5 bg-linear-to-r from-transparent via-border to-transparent" />
 
               {[
                 {
@@ -484,7 +482,7 @@ export default function LandingPage() {
         </motion.section>
 
         {/* ── TESTIMONIALS ───────────────────────────────────────── */}
-        <motion.section
+        {/* <motion.section
           id="testimonials"
           className="py-24 px-5 bg-card border-y border-border"
           initial={{ opacity: 0 }}
@@ -502,7 +500,6 @@ export default function LandingPage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {testimonials.map((t, i) => (
                 <motion.div key={i} className={`testimonial-card bg-background border border-border rounded-2xl p-6 transition-all duration-300 cursor-default`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: i * 0.2 }}>
-                  {/* Stars */}
                   <div className="flex gap-0.5 mb-4">
                     {[1, 2, 3, 4, 5].map(s => (
                       <svg key={s} className="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
@@ -526,7 +523,7 @@ export default function LandingPage() {
               ))}
             </div>
           </div>
-        </motion.section>
+        </motion.section> */}
 
         {/* ── CTA BANNER ─────────────────────────────────────────── */}
         <motion.section
@@ -546,7 +543,7 @@ export default function LandingPage() {
               Join the thousands of professionals who are taking control of their financial future. Sign up free and be earning in less than 3 minutes.
             </p>
             <div className="flex flex-wrap gap-3 justify-center">
-              <Link href={isLoggedIn ? (userRole === 'worker' ? '/dashboard/worker' : '/dashboard/customer') : '/register?role=worker'} className="group px-6 py-3.5 rounded-full text-sm font-bold text-foreground bg-white hover:bg-white/90 active:scale-95 transition-all inline-flex items-center gap-2">
+              <Link href={isLoggedIn ? (userRole === 'worker' ? '/dashboard/worker' : '/dashboard/customer') : '/register?role=worker'} className="group px-6 py-3.5 rounded-full text-sm font-bold bg-card text-white active:scale-95 transition-all inline-flex items-center gap-2" style={{ background: 'linear-gradient(135deg, hsl(160 84% 39%), hsl(160 84% 30%))' }}>
                 {isLoggedIn ? 
                 (
                   <div className="flex items-center gap-1">
@@ -563,7 +560,7 @@ export default function LandingPage() {
                 )}
               </Link>
               {!isLoggedIn && (
-                <Link href="/register?role=customer" className="px-6 py-3.5 rounded-full text-sm font-bold text-white border border-white/30 hover:bg-white/10 active:scale-95 transition-all">
+                <Link href="/register?role=customer" className="px-6 py-3.5 rounded-full text-sm font-bold border border-white/30 hover:bg-white/10 active:scale-95 transition-all">
                   Hire a Worker
                 </Link>
               )}
@@ -581,12 +578,13 @@ export default function LandingPage() {
               {/* Brand */}
               <div className="col-span-2 md:col-span-1">
                 <div className="flex items-center gap-2 mb-3">
-                  <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: 'linear-gradient(135deg, hsl(221 66% 47%), hsl(221 68% 38%))' }}>
-                    <span className="text-white font-bold text-xs">S</span>
+                  <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: 'linear-gradient(135deg, hsl(221 66% 47%), hsl(221 68% 38%))' }}>
+                    {/* <span className="text-white font-bold text-xs">S</span> */}
+                    <Map size={16} />
                   </div>
                   <span className="font-bold text-foreground">StreetCred</span>
                 </div>
-                <p className="text-xs text-muted-foreground leading-relaxed max-w-40">
+                <p className="text-xs text-muted-foreground leading-relaxed max-w-sm">
                   Turning Nigeria's invisible workers into financially visible entrepreneurs.
                 </p>
               </div>

@@ -65,7 +65,7 @@ export default function WorkerProfilePage() {
             </div>
 
             {/* Info */}
-            <div className="flex-1 space-y-2">
+            <div className="flex-1">
               <h1 className="text-3xl font-bold capitalize">
                 {worker.userId.name}
               </h1>
@@ -151,7 +151,7 @@ export default function WorkerProfilePage() {
                 <div key={r._id} className="border-b pb-4 last:border-0">
 
                   <div className="flex justify-between text-sm mb-1">
-                    <span className="font-medium">{r.customerId.name}</span>
+                    <span className="font-medium capitalize">{r.customerId.name}</span>
                     <span className="text-muted-foreground">
                       {new Date(r.createdAt).toLocaleDateString()}
                     </span>

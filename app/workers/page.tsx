@@ -56,10 +56,10 @@ function WorkerCard({ worker }: { worker: Worker }) {
     .toUpperCase();
 
   return (
-    <div className="w-[320px] bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-100">
+    <div className="w-[320px] rounded-2xl shadow-sm overflow-hidden border border-gray-100">
       
       {/* Top Section */}
-      <div className="relative bg-linear-to-b from-accent/80 to-accent/90 h-48 flex items-center justify-center">
+      <div className="relative bg-accent h-48 flex items-center justify-center">
         
         {/* Profile Image / Initials */}
         {worker.userId.profileImage ? (
@@ -93,10 +93,10 @@ function WorkerCard({ worker }: { worker: Worker }) {
         {/* Name + Rating */}
         <div className="flex items-start justify-between">
           <div>
-            <h3 className="font-semibold text-lg text-gray-900 capitalize">
+            <h3 className="font-semibold text-lg text-gray-900 dark:text-gray-300 capitalize">
               {worker.userId.name}
             </h3>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-gray-500 dark:text-gray-300">
               {worker.profession}
             </p>
             <p className="text-xs text-gray-400">
@@ -159,7 +159,7 @@ function WorkerCard({ worker }: { worker: Worker }) {
 
           <Link
             href={`/workers/${worker._id}`}
-            className="bg-blue-900 text-white text-sm font-semibold px-4 py-2 rounded-full hover:bg-blue-800 transition"
+            className="text-white text-sm font-semibold px-4 py-2 rounded-full transition bg-primary hover:bg-primary/80"
           >
             View Profile
           </Link>
