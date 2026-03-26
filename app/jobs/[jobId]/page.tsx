@@ -118,19 +118,19 @@ export default function JobDetailPage() {
   const statusColor = STATUS_COLORS[job.status] || { bg: 'bg-slate-50', text: 'text-slate-700', icon: '•' };
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-slate-50 to-slate-100">
+    <div className="min-h-screen bg-background">
       {/* Header Navigation */}
-      <div className="bg-white border-b border-slate-200 sticky top-0 z-10 shadow-sm">
+      <div className="bg-background border-b border-slate-200 sticky top-0 z-10 shadow-sm">
         <div className="max-w-4xl mx-auto px-4 py-4 flex items-center gap-3">
           <Link
             href={backHref}
-            className="inline-flex items-center gap-2 text-slate-600 hover:text-slate-900 transition-colors p-2 hover:bg-slate-100 rounded-lg"
+            className="group inline-flex items-center gap-1 text-slate-600 dark:text-slate-900 hover:text-slate-900 transition-colors py-2 px-3 bg-slate-100 rounded-lg"
           >
-            <ChevronLeft size={20} />
+            <ChevronLeft size={20} className='group-hover:-translate-x-2 transition-all duration-500' />
             <span className="text-sm font-medium">Back</span>
           </Link>
           <div className="w-px h-5 bg-slate-300" />
-          <span className="text-sm font-semibold text-slate-900">Job #{jobId.slice(-6).toUpperCase()}</span>
+          <span className="text-sm font-semibold text-slate-900 dark:text-white">Job #{jobId.slice(-6).toUpperCase()}</span>
           <div className="ml-auto">
             <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold ${statusColor.bg} ${statusColor.text}`}>
               {STATUS_LABELS[job.status] ?? job.status}
@@ -141,53 +141,53 @@ export default function JobDetailPage() {
 
       <div className="max-w-4xl mx-auto px-4 py-8 space-y-6">
         {/* Main Job Card */}
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        <div className="bg-white dark:bg-blue-900 rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
           <div className="p-8">
             <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6 mb-6">
               <div className="flex-1">
-                <h1 className="text-3xl font-bold text-slate-900 mb-2">{job.title}</h1>
-                <p className="text-slate-600 flex items-center gap-2">
+                <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2">{job.title}</h1>
+                <p className="text-slate-600 dark:text-white flex items-center gap-2">
                   <span className="inline-block w-2 h-2 rounded-full bg-blue-500" />
                   {job.workerId.profession} • {job.workerId.location.city}, {job.workerId.location.state}
                 </p>
               </div>
               <div className="shrink-0 text-right lg:text-left">
-                <p className="text-4xl font-bold text-slate-900">₦{job.price.toLocaleString('en-NG')}</p>
-                <p className="text-xs text-slate-500 mt-1">Total price</p>
+                <p className="text-4xl font-bold text-slate-900 dark:text-white">₦{job.price.toLocaleString('en-NG')}</p>
+                <p className="text-xs text-slate-500 mt-1 dark:text-gray-300">Total price</p>
               </div>
             </div>
 
             {job.description && (
               <div className="mb-6 pb-6 border-b border-slate-200">
-                <p className="text-slate-700 leading-relaxed text-base">{job.description}</p>
+                <p className="text-slate-700 dark:text-gray-300 leading-relaxed text-base">{job.description}</p>
               </div>
             )}
 
             {/* Metadata */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               <div className="flex items-start gap-3">
-                <User size={18} className="text-slate-400 mt-0.5 shrink-0" />
+                <User size={18} className="text-slate-400 dark:text-white mt-0.5 shrink-0" />
                 <div>
-                  <p className="text-xs text-slate-500 uppercase font-semibold">Customer</p>
-                  <p className="text-sm font-medium text-slate-900">{job.customerId.name}</p>
+                  <p className="text-xs text-slate-500 dark:text-white uppercase font-semibold">Customer</p>
+                  <p className="text-sm font-medium text-slate-900 dark:text-gray-300 capitalize">{job.customerId.name}</p>
                 </div>
               </div>
               {job.scheduledDate && (
                 <div className="flex items-start gap-3">
-                  <Calendar size={18} className="text-slate-400 mt-0.5 shrink-0" />
+                  <Calendar size={18} className="text-slate-400 dark:text-white mt-0.5 shrink-0" />
                   <div>
-                    <p className="text-xs text-slate-500 uppercase font-semibold">Scheduled</p>
-                    <p className="text-sm font-medium text-slate-900">
+                    <p className="text-xs text-slate-500 dark:text-white uppercase font-semibold">Scheduled</p>
+                    <p className="text-sm font-medium text-slate-900 dark:text-gray-300">
                       {new Date(job.scheduledDate).toDateString()}
                     </p>
                   </div>
                 </div>
               )}
               <div className="flex items-start gap-3">
-                <Clock size={18} className="text-slate-400 mt-0.5 shrink-0" />
+                <Clock size={18} className="text-slate-400 dark:text-white mt-0.5 shrink-0" />
                 <div>
-                  <p className="text-xs text-slate-500 uppercase font-semibold">Posted</p>
-                  <p className="text-sm font-medium text-slate-900">
+                  <p className="text-xs text-slate-500 dark:text-white uppercase font-semibold">Posted</p>
+                  <p className="text-sm font-medium text-slate-900 dark:text-gray-300">
                     {new Date(job.createdAt).toDateString()}
                   </p>
                 </div>
@@ -275,8 +275,8 @@ export default function JobDetailPage() {
         )}
 
         {/* Timeline */}
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-8">
-          <h2 className="text-lg font-bold text-slate-900 mb-8">Job timeline</h2>
+        <div className="bg-white dark:bg-blue-900 rounded-2xl border border-slate-200 shadow-sm p-8">
+          <h2 className="text-lg font-bold text-slate-900 dark:text-white mb-8">Job timeline</h2>
           <div className="space-y-6">
             {job.timeline.map((entry, i) => (
               <div key={entry._id} className="flex gap-4">
@@ -292,13 +292,13 @@ export default function JobDetailPage() {
 
                 {/* Timeline content */}
                 <div className="pt-1 flex-1 pb-4">
-                  <p className="font-semibold text-slate-900 text-base">
+                  <p className="font-semibold text-slate-900 dark:text-white text-base">
                     {STATUS_LABELS[entry.status] ?? entry.status}
                   </p>
                   {entry.notes && (
-                    <p className="text-sm text-slate-600 mt-1">{entry.notes}</p>
+                    <p className="text-sm text-slate-600 dark:text-gray-300 mt-1">{entry.notes}</p>
                   )}
-                  <p className="text-xs text-slate-500 mt-2 flex items-center gap-1">
+                  <p className="text-xs text-slate-500 dark:text-gray-300 mt-2 flex items-center gap-1">
                     <Clock3 size={14} />
                     {new Date(entry.createdAt).toLocaleString('en-NG', {
                       day: 'numeric',

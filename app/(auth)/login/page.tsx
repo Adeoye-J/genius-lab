@@ -1,11 +1,11 @@
 import LoginClient from './LoginClient';
 
-export default function LoginPage({
+export default async function LoginPage({
   searchParams,
 }: {
   searchParams: { redirect?: string };
 }) {
-  const {redirect} = searchParams
+  const {redirect} = await searchParams;
   const redirectTo = redirect ?? '';
 
   return <LoginClient redirectTo={redirectTo} />;

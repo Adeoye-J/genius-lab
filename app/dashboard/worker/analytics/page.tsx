@@ -144,10 +144,10 @@ function ScoreBreakdown({ data }: { data: AnalyticsData }) {
       {components.map((c) => (
         <div key={c.label}>
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm text-gray-600">{c.label} <span className="text-xs text-gray-500">({c.weight})</span></span>
-            <span className="text-sm font-semibold text-gray-900 tabular-nums">
+            <span className="text-sm text-gray-600 dark:text-gray-300">{c.label} <span className="text-xs text-gray-500 dark:text-gray-300">({c.weight})</span></span>
+            <span className="text-sm font-semibold text-gray-900 dark:text-gray-300 tabular-nums">
               {c.value}{c.label === 'Average rating' ? '/5.0' : `/${c.max}`}
-              <span className="text-xs text-gray-500 ml-2">→ {c.pts} pts</span>
+              <span className="text-xs text-gray-500 dark:text-gray-300 ml-2">→ {c.pts} pts</span>
             </span>
           </div>
           <div className="h-3 bg-gray-100 rounded-full overflow-hidden">
@@ -168,7 +168,7 @@ function ScoreBreakdown({ data }: { data: AnalyticsData }) {
 
       <div className="flex items-center justify-between pt-3 border-t border-gray-200">
         <span className="text-sm font-semibold text-gray-900">Trust score</span>
-        <span className="text-3xl font-bold text-blue-600">{data.trustScore}<span className="text-sm text-gray-500 font-normal ml-1">/100</span></span>
+        <span className="text-3xl font-bold text-blue-600 dark:text-blue-400">{data.trustScore}<span className="text-sm text-gray-500 dark:text-gray-300 font-normal ml-1">/100</span></span>
       </div>
     </div>
   );
@@ -207,7 +207,7 @@ export default function WorkerAnalyticsPage() {
   if (error || !data) {
     return (
       <div className="text-center py-16">
-        <p className="text-gray-500">{error || 'No data available'}</p>
+        <p className="text-gray-500 dark:text-gray-300">{error || 'No data available'}</p>
       </div>
     );
   }
@@ -286,35 +286,35 @@ export default function WorkerAnalyticsPage() {
       </div>
 
       {/* Earnings Chart */}
-      <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+      <div className="border border-gray-200 rounded-xl p-6 shadow-sm">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h2 className="text-lg font-semibold text-gray-900">Monthly earnings</h2>
-            <p className="text-sm text-gray-500 mt-1">Last 6 months performance</p>
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-300">Monthly earnings</h2>
+            <p className="text-sm text-gray-500 dark:text-gray-300 mt-1">Last 6 months performance</p>
           </div>
           <span className="text-xs font-medium bg-blue-100 text-blue-700 px-3 py-1 rounded-full">Last 6 months</span>
         </div>
         {data.monthly.some((m) => m.earnings > 0) ? (
           <EarningsChart data={data.monthly} />
         ) : (
-          <div className="flex items-center justify-center h-32 text-gray-500 text-sm">
+          <div className="flex items-center justify-center h-32 text-gray-500 dark:text-gray-300 text-sm">
             No earnings data yet — complete your first paid job
           </div>
         )}
       </div>
 
       {/* Trust Score Breakdown */}
-      <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+      <div className="border border-gray-200 rounded-xl p-6 shadow-sm">
         <h2 className="text-lg font-semibold text-gray-900 mb-6">Trust score breakdown</h2>
         <ScoreBreakdown data={data} />
       </div>
 
       {/* Rating Trend */}
-      <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+      <div className="border border-gray-200 rounded-xl p-6 shadow-sm">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h2 className="text-lg font-semibold text-gray-900">Rating trend</h2>
-            <p className="text-sm text-gray-500 mt-1">How your ratings have evolved</p>
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-300">Rating trend</h2>
+            <p className="text-sm text-gray-500 dark:text-gray-300 mt-1">How your ratings have evolved</p>
           </div>
           <span className="text-xs font-medium bg-blue-100 text-blue-700 px-3 py-1 rounded-full">Last 6 months</span>
         </div>

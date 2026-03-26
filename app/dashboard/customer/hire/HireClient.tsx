@@ -121,7 +121,7 @@ export default function HireClient({preselectedWorkerId} : {preselectedWorkerId:
                 placeholder="Paste worker ID from their profile"
                 className={`flex-1 h-11 px-4 rounded-lg border bg-card text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring ${errors.workerId ? 'border-destructive' : 'border-input'}`}
               />
-              <a href="/workers" className="h-11 px-4 flex items-center bg-primary text-primary-foreground font-semibold text-sm hover:bg-primary/90 active:scale-[0.98] transition-all rounded-lg whitespace-nowrap">
+              <a href="/workers" className="h-11 px-4 flex items-center bg-primary text-white font-semibold text-sm hover:bg-primary/90 active:scale-[0.98] transition-all rounded-lg whitespace-nowrap">
                 Browse workers
               </a>
             </div>
@@ -223,7 +223,7 @@ export default function HireClient({preselectedWorkerId} : {preselectedWorkerId:
             Cancel
           </button>
           <button type="submit" disabled={loading}
-            className="flex-1 h-11 rounded-lg bg-primary text-primary-foreground font-semibold text-sm hover:bg-primary/90 active:scale-[0.98] transition-all disabled:opacity-60 cursor-pointer"
+            className="flex-1 h-11 rounded-lg bg-primary text-white font-semibold text-sm hover:bg-primary/90 active:scale-[0.98] transition-all disabled:opacity-60 cursor-pointer"
           >
             {loading ? (
               <span className="flex items-center justify-center gap-2">

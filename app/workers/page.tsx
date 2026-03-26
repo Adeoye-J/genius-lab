@@ -261,7 +261,7 @@ export default function WorkersPage() {
 
           <button
             onClick={handleSearch}
-            className="h-10 px-4 bg-primary text-primary-foreground rounded-lg text-sm font-semibold hover:bg-primary/90 active:scale-[0.98] transition-all"
+            className="h-10 px-4 bg-primary rounded-lg text-sm font-semibold hover:bg-primary/90 text-white active:scale-[0.98] cursor-pointer transition-all"
           >
             Search
           </button>

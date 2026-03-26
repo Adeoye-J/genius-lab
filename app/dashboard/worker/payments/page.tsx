@@ -80,7 +80,7 @@ export default function WorkerPaymentsPage() {
           </div>
 
           {/* This Month */}
-          <div className="bg-white border border-gray-200 rounded-lg p-6">
+          <div className="bg-surface-muted border border-gray-200 rounded-lg p-6">
             <div className="flex items-center justify-between mb-3">
               <span className="text-xs font-semibold text-foreground/60 uppercase tracking-wide">This Month</span>
               <Calendar size={18} className="text-foreground/40" />
@@ -90,7 +90,7 @@ export default function WorkerPaymentsPage() {
           </div>
 
           {/* Total Payments */}
-          <div className="bg-white border border-gray-200 rounded-lg p-6">
+          <div className="bg-surface-muted border border-gray-200 rounded-lg p-6">
             <div className="flex items-center justify-between mb-3">
               <span className="text-xs font-semibold text-foreground/60 uppercase tracking-wide">Total Payments</span>
               <CreditCard size={18} className="text-foreground/40" />
@@ -103,7 +103,7 @@ export default function WorkerPaymentsPage() {
 
       {/* Transactions */}
       {payments.length === 0 ? (
-        <div className="bg-white border border-gray-200 rounded-lg p-12 text-center">
+        <div className="bg-surface-muted border border-gray-200 rounded-lg p-12 text-center">
           <div className="flex justify-center mb-4">
             <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center">
               <CreditCard size={24} className="text-foreground/30" />
@@ -113,16 +113,16 @@ export default function WorkerPaymentsPage() {
           <p className="text-sm text-foreground/60">Verified payments will appear here after customers pay for your completed jobs</p>
         </div>
       ) : (
-        <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
+        <div className="bg-surface-muted border border-gray-200 rounded-lg overflow-hidden">
           {/* Table Header */}
-          <div className="px-6 py-4 bg-gray-50 border-b border-gray-200">
+          <div className="px-6 py-4 bg-surface-muted border-b border-gray-200">
             <p className="text-xs font-semibold text-foreground/60 uppercase tracking-wider">Transaction History</p>
           </div>
 
           {/* Table Body */}
           <div className="divide-y divide-gray-200">
             {payments.map((p) => (
-              <div key={p._id} className="px-6 py-4 flex items-start justify-between gap-6 hover:bg-gray-50/50 transition-colors">
+              <div key={p._id} className="px-6 py-4 flex items-start justify-between gap-6 hover:bg-surface-muted/20 transition-colors">
                 {/* Left: Job Details */}
                 <div className="min-w-0 flex-1">
                   <p className="text-sm font-semibold text-foreground truncate">{p.jobId?.title ?? 'Job payment'}</p>

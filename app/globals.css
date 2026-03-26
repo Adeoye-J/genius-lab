@@ -172,8 +172,8 @@ h4 {
   letter-spacing: -0.025em;
 } */
 
-p { line-height: 1.75; }
-p + p { margin-top: 1.5rem; }
+/* p { line-height: 1.75; } */
+/* p + p { margin-top: 1.5rem; } */
 
 blockquote {
   margin-top: 1.5rem;

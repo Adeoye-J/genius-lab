@@ -27,13 +27,13 @@ const NAV_ITEMS = [
 function Sidebar({ userName, onLogout, onCloseSidebar }: { userName: string; onLogout: () => void; onCloseSidebar?: () => void }) {
   const pathname = usePathname();
   return (
-    <aside className="w-64 min-h-screen flex flex-col border-r-2 bg-white">
+    <aside className="w-64 min-h-screen flex flex-col border-r-2 bg-white dark:bg-black">
       <div className="p-6 border-b-2">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 bg-primary/80 rounded-lg flex items-center justify-center">
             <Map className='text-white' />
           </div>
-          <span className="font-bold text-lg" style={{ color: 'hsl(var(--sidebar-foreground))' }}>StreetCred</span>
+          <span className="font-bold text-lg text-black dark:text-white">StreetCred</span>
         </div>
       </div>
       
@@ -43,7 +43,7 @@ function Sidebar({ userName, onLogout, onCloseSidebar }: { userName: string; onL
           const isActive = pathname === item.href;
           return (
             <Link key={item.href} href={item.href} onClick={onCloseSidebar}
-              className={`flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium transition-all 
+              className={`flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium transition-all text-black dark:text-white
                 ${ isActive
                   ? 'bg-primary text-white'
                   : 'hover:bg-primary/70 hover:text-white'
@@ -62,12 +62,12 @@ function Sidebar({ userName, onLogout, onCloseSidebar }: { userName: string; onL
           </div>
           <div className="min-w-0">
             <p className="text-sm font-semibold text-primary truncate capitalize">{userName}</p>
-            <p className="text-xs">Customer</p>
+            <p className="text-xs text-black dark:text-white">Customer</p>
           </div>
         </div>
-        <button onClick={onLogout} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all bg-destructive text-white hover:bg-destructive/90 font-semibold cursor-pointer">
+        <button onClick={onLogout} className="w-full flex items-center gap-3 px-3 py-3 rounded-lg text-sm transition-all bg-destructive text-white hover:bg-destructive/90 font-semibold cursor-pointer">
           <DoorOpen />
-          Sign out
+          Sign Out
         </button>
       </div>
     </aside>
