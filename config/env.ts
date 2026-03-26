@@ -54,4 +54,13 @@ export const env = {
   // Termii SMS
   termiiApiKey:  optionalEnv('TERMII_API_KEY'),
   termiiSenderId: optionalEnv('TERMII_SENDER_ID', 'StreetCred'),
+
+
+  // ── Interswitch Marketplace API (bank account verification) ────
+  // Separate credentials from the payments dashboard —
+  // get these from your Interswitch Marketplace developer console
+  marketplaceClientId:     optionalEnv('ISW_MARKETPLACE_CLIENT_ID'),
+  marketplaceClientSecret: optionalEnv('ISW_MARKETPLACE_CLIENT_SECRET'),
+  marketplaceBaseUrl:      optionalEnv('ISW_MARKETPLACE_BASE_URL', 'https://api-marketplace-routing.k8.isw.la/marketplace-routing/api/v1'),
+  marketplacePassportUrl:  optionalEnv('ISW_MARKETPLACE_PASSPORT_URL', 'https://passport.interswitchng.com'),
 } as const;

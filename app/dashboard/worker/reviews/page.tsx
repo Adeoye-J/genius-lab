@@ -80,12 +80,12 @@ export default function WorkerReviewsPage() {
       </div>
 
       {reviews.length === 0 ? (
-        <div className="bg-white border border-gray-200 rounded-lg p-12 text-center">
+        <div className="bg-card border border-gray-200 rounded-lg p-12 text-center">
           <div className="inline-flex items-center justify-center w-12 h-12 bg-gray-100 rounded-full mb-4">
             <Star size={24} className="text-gray-400" />
           </div>
-          <p className="text-lg font-semibold text-gray-900 mb-1">No reviews yet</p>
-          <p className="text-sm text-gray-600">Complete your first job to start receiving reviews</p>
+          <p className="text-lg font-semibold text-gray-900 dark:text-gray-300 mb-1">No reviews yet</p>
+          <p className="text-sm text-gray-600 dark:text-gray-300">Complete your first job to start receiving reviews</p>
         </div>
       ) : (
         <>

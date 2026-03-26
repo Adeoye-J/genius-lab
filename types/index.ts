@@ -5,6 +5,7 @@ export interface ApiResponse<T = unknown> {
   data?: T;
   error?: string;
   message?: string;
+  code?: string;
 }
 
 export interface PaginatedResponse<T> extends ApiResponse<T[]> {

@@ -106,7 +106,7 @@ export default function WorkerPaymentsPage() {
         <div className="bg-surface-muted border border-gray-200 rounded-lg p-12 text-center">
           <div className="flex justify-center mb-4">
             <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center">
-              <CreditCard size={24} className="text-foreground/30" />
+              <CreditCard size={24} className="text-gray-400" />
             </div>
           </div>
           <p className="text-lg font-semibold text-foreground mb-2">No payments yet</p>

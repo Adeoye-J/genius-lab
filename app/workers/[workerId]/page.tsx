@@ -57,31 +57,33 @@ export default function WorkerProfilePage() {
             Back to workers
           </Link>
 
-          <div className="mt-8 flex flex-col md:flex-row md:items-center gap-8">
+          <div className="mt-8 flex flex-col sm:flex-row justify-between md:items-center gap-8">
+            
+            <div className="flex items-center gap-6">
+              {/* Avatar */}
+              <div className="w-28 h-28 rounded-full bg-white/10 backdrop-blur flex items-center justify-center text-3xl font-bold border border-white/20 glow-primary">
+                {initials}
+              </div>
 
-            {/* Avatar */}
-            <div className="w-28 h-28 rounded-full bg-white/10 backdrop-blur flex items-center justify-center text-3xl font-bold border border-white/20 glow-primary">
-              {initials}
-            </div>
+              {/* Info */}
+              <div className="flex-1">
+                <h1 className="text-3xl font-bold capitalize">
+                  {worker.userId.name}
+                </h1>
 
-            {/* Info */}
-            <div className="flex-1">
-              <h1 className="text-3xl font-bold capitalize">
-                {worker.userId.name}
-              </h1>
+                <p className="text-white/80 text-sm">{worker.profession}</p>
+                <p className="text-white/60 text-xs">
+                  {worker.location.city}, {worker.location.state}
+                </p>
 
-              <p className="text-white/80">{worker.profession}</p>
-              <p className="text-white/60 text-sm">
-                {worker.location.city}, {worker.location.state}
-              </p>
-
-              <span className={`inline-block text-xs px-3 py-1 rounded-full font-medium mt-2 ${
-                worker.isAvailable
-                  ? 'bg-accent/20 text-accent'
-                  : 'bg-white/10 text-white/60'
-              }`}>
-                {worker.isAvailable ? 'Available for work' : 'Unavailable'}
-              </span>
+                <span className={`inline-block text-xs px-3 py-1 rounded-full font-medium mt-2 ${
+                  worker.isAvailable
+                    ? 'bg-accent/20 text-accent'
+                    : 'bg-white/10 text-white/60'
+                }`}>
+                  {worker.isAvailable ? 'Available for work' : 'Unavailable'}
+                </span>
+              </div>
             </div>
 
             {/* Rating */}
