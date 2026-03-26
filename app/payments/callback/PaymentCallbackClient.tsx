@@ -7,7 +7,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
-type Status = 'verifying' | 'success' | 'failed' | 'pending';
+type Status = 'verifying' | 'successful' | 'failed' | 'pending';
 
 export default function PaymentCallbackClient({ txnRef }: { txnRef: string }) {
   const router = useRouter();
@@ -62,7 +62,7 @@ export default function PaymentCallbackClient({ txnRef }: { txnRef: string }) {
           </>
         )}
 
-        {status === 'success' && (
+        {status === 'successful' && (
           <>
             <div className="w-20 h-20 bg-accent/10 rounded-full flex items-center justify-center mx-auto mb-6">
               <svg className="w-10 h-10 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">

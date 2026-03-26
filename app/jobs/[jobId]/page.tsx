@@ -221,14 +221,14 @@ export default function JobDetailPage() {
                     <button
                       onClick={() => doAction('cancel')}
                       disabled={actioning}
-                      className="px-4 py-2 text-sm font-medium border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 disabled:opacity-50 transition-all"
+                      className="px-4 py-2 text-sm font-medium border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 disabled:opacity-50 transition-all cursor-pointer"
                     >
                       Decline
                     </button>
                     <button
                       onClick={() => doAction('accept')}
                       disabled={actioning}
-                      className="px-6 py-2 text-sm font-semibold bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-all active:scale-95"
+                      className="px-6 py-2 text-sm font-semibold bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-all active:scale-95 cursor-pointer"
                     >
                       {actioning ? 'Processing...' : 'Accept job'}
                     </button>
@@ -238,7 +238,7 @@ export default function JobDetailPage() {
                   <button
                     onClick={() => doAction('start')}
                     disabled={actioning}
-                    className="px-6 py-2 text-sm font-semibold bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 transition-all active:scale-95"
+                    className="px-6 py-2 text-sm font-semibold bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 transition-all active:scale-95 cursor-pointer"
                   >
                     {actioning ? 'Processing...' : 'Mark as started'}
                   </button>
@@ -247,7 +247,7 @@ export default function JobDetailPage() {
                   <button
                     onClick={() => doAction('complete')}
                     disabled={actioning}
-                    className="px-6 py-2 text-sm font-semibold bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 disabled:opacity-50 transition-all active:scale-95"
+                    className="px-6 py-2 text-sm font-semibold bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 disabled:opacity-50 transition-all active:scale-95 cursor-pointer"
                   >
                     {actioning ? 'Processing...' : 'Mark as complete'}
                   </button>
@@ -255,7 +255,7 @@ export default function JobDetailPage() {
                 {isCustomer && job.status === 'completed' && (
                   <Link
                     href={`/payments/pay?jobId=${job._id}`}
-                    className="px-6 py-2 text-sm font-semibold bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all active:scale-95 inline-block"
+                    className="px-6 py-2 text-sm font-semibold bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all active:scale-95 inline-block cursor-pointer"
                   >
                     Pay now
                   </Link>
@@ -264,7 +264,7 @@ export default function JobDetailPage() {
                   <button
                     onClick={() => doAction('cancel')}
                     disabled={actioning}
-                    className="px-4 py-2 text-xs font-medium text-red-600 border border-red-200 rounded-lg hover:bg-red-50 disabled:opacity-50 transition-all"
+                    className="px-4 py-2 text-xs font-medium text-red-600 border border-red-200 rounded-lg hover:bg-red-50 disabled:opacity-50 transition-all cursor-pointer"
                   >
                     Cancel job
                   </button>

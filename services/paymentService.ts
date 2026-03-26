@@ -25,6 +25,7 @@ export async function initializeJobPayment(jobId: string, customerId: string) {
   if (job.status  === "paid") {
     throw Object.assign(new Error('You have already made payment for this job.'), { status: 400 });
   }
+
   if (job.status !== 'completed') {
     throw Object.assign(new Error('Job must be completed before payment'), { status: 400 });
   }
@@ -81,14 +82,40 @@ export async function initializeJobPayment(jobId: string, customerId: string) {
 export async function verifyAndSettlePayment(transactionRef: string) {
   await connectDB();
 
-  const payment = await Payment.findOne({ transactionReference: transactionRef });
-  if (!payment) throw Object.assign(new Error('Payment record not found'), { status: 404 });
+  const existingPayment = await Payment.findOne({ transactionReference: transactionRef });
+  if (!existingPayment) throw Object.assign(new Error('Payment record not found'), { status: 404 });
 
   // Already settled — idempotent
-  if (payment.status === 'successful') {
-    return { status: 'successful', payment };
+  if (existingPayment.status === 'successful') {
+    return { status: 'successful', existingPayment };
   }
 
+  // Already failed — nothing to do
+  if (existingPayment.status === 'failed') {
+    return { status: 'failed', existingPayment };
+  }
+
+  // Atomically claim the settlement slot.
+  // Only one concurrent call will succeed — the other gets null.
+  const claimed = await Payment.findOneAndUpdate(
+    {
+      transactionReference: transactionRef,
+      status: 'pending',   // ← only matches if STILL pending (atomic guard)
+    },
+    { $set: { status: 'processing' } }, // intermediate state — prevents second claim
+    { new: false }                       // return the old doc so we know we won
+  );
+ 
+  if (!claimed) {
+    // Another call already claimed this payment — wait briefly and return current state
+    // (the other call is mid-settlement, status will be successful shortly)
+    console.log(`[Payment] ${transactionRef} already claimed by concurrent call — skipping`);
+    const current = await Payment.findOne({ transactionReference: transactionRef });
+    return { status: current?.status ?? 'pending', payment: current ?? existingPayment };
+  }
+ 
+  // We won the race — proceed with settlement
+  const payment            = claimed;
   const expectedAmountKobo = Math.round(payment.amount * 100);
 
   // Server-side verify with Interswitch
@@ -96,14 +123,28 @@ export async function verifyAndSettlePayment(transactionRef: string) {
 
   console.log(`[Payment] ${transactionRef} → ${result.status} (${result.responseCode}: ${result.responseMessage})`);
 
+  // if (result.status === 'successful') {
+  //   // ── 1. Update Payment record ───────────────────────────────
+  //   payment.status        = 'successful';
+  //   payment.paymentMethod = 'card';
+  //   payment.paidAt        = result.transactionDate
+  //     ? new Date(result.transactionDate)
+  //     : new Date();
+  //   await payment.save();
+  //   console.log('[Payment] ✓ Payment record updated');
+
   if (result.status === 'successful') {
-    // ── 1. Update Payment record ───────────────────────────────
-    payment.status        = 'successful';
-    payment.paymentMethod = 'card';
-    payment.paidAt        = result.transactionDate
-      ? new Date(result.transactionDate)
-      : new Date();
-    await payment.save();
+    // ── 1. Mark payment successful ─────────────────────────────
+    await Payment.findOneAndUpdate(
+      { transactionReference: transactionRef },
+      {
+        $set: {
+          status:        'successful',
+          paymentMethod: 'card',
+          paidAt:        result.transactionDate ? new Date(result.transactionDate) : new Date(),
+        },
+      }
+    );
     console.log('[Payment] ✓ Payment record updated');
 
     // ── 2. Mark Job as paid ────────────────────────────────────
@@ -155,15 +196,30 @@ export async function verifyAndSettlePayment(transactionRef: string) {
       console.error('[Payment] Notification failed:', (err as Error).message);
     }
 
+    // Return the fresh payment doc
+    const settled = await Payment.findOne({ transactionReference: transactionRef });
+    return { status: 'successful', payment: settled ?? payment };
+
   } else if (result.status === 'failed') {
-    payment.status = 'failed';
-    await payment.save();
+    // payment.status = 'failed';
+    // await payment.save();
+    await Payment.findOneAndUpdate(
+      { transactionReference: transactionRef },
+      { $set: { status: 'failed' } }
+    );
     console.log(`[Payment] ✗ Payment failed: ${result.responseCode} — ${result.responseMessage}`);
+    return { status: 'failed', payment };
   } else {
+    // Still pending — reset to pending so it can be retried
+    await Payment.findOneAndUpdate(
+      { transactionReference: transactionRef },
+      { $set: { status: 'pending' } }
+    );
     console.log(`[Payment] ⏳ Payment pending: ${result.responseCode}`);
+    return { status: 'pending', payment };
   }
 
-  return { status: result.status, payment };
+  // return { status: result.status, payment };
 }
 
 // ── Repair utility ────────────────────────────────────────────────
@@ -171,43 +227,43 @@ export async function verifyAndSettlePayment(transactionRef: string) {
 // missing WorkerEarnings / TrustScore updates (catches the existing broken records).
 // POST /api/payments/repair — admin only
 
-export async function repairPaidPayments() {
-  await connectDB();
+// export async function repairPaidPayments() {
+//   await connectDB();
 
-  const paidPayments = await Payment.find({ status: 'successful' }).lean();
-  const results = [];
+//   const paidPayments = await Payment.find({ status: 'successful' }).lean();
+//   const results = [];
 
-  for (const payment of paidPayments) {
-    const workerProfileId = payment.workerId.toString();
+//   for (const payment of paidPayments) {
+//     const workerProfileId = payment.workerId.toString();
 
-    try {
-      // Recount actual values from source
-      const { recalculateTrustScore } = await import('@/lib/trust/trustScoreEngine');
+//     try {
+//       // Recount actual values from source
+//       const { recalculateTrustScore } = await import('@/lib/trust/trustScoreEngine');
 
-      // Recalculate earnings from actual payment records
-      const allPayments = await Payment.find({
-        workerId: payment.workerId,
-        status: 'successful',
-      }).lean();
+//       // Recalculate earnings from actual payment records
+//       const allPayments = await Payment.find({
+//         workerId: payment.workerId,
+//         status: 'successful',
+//       }).lean();
 
-      const totalEarnings = allPayments.reduce((sum, p) => sum + p.amount, 0);
+//       const totalEarnings = allPayments.reduce((sum, p) => sum + p.amount, 0);
 
-      await WorkerEarnings.findOneAndUpdate(
-        { workerId: payment.workerId },
-        { $set: { totalEarnings, lastPaymentDate: payment.paidAt ?? new Date() } },
-        { upsert: true }
-      );
+//       await WorkerEarnings.findOneAndUpdate(
+//         { workerId: payment.workerId },
+//         { $set: { totalEarnings, lastPaymentDate: payment.paidAt ?? new Date() } },
+//         { upsert: true }
+//       );
 
-      const score = await recalculateTrustScore(workerProfileId);
+//       const score = await recalculateTrustScore(workerProfileId);
 
-      results.push({ workerId: workerProfileId, totalEarnings, score, ok: true });
-    } catch (err) {
-      results.push({ workerId: workerProfileId, ok: false, error: (err as Error).message });
-    }
-  }
+//       results.push({ workerId: workerProfileId, totalEarnings, score, ok: true });
+//     } catch (err) {
+//       results.push({ workerId: workerProfileId, ok: false, error: (err as Error).message });
+//     }
+//   }
 
-  return results;
-}
+//   return results;
+// }
 
 // ── Worker payment history ────────────────────────────────────────
 export async function getWorkerPaymentHistory(workerId: string, page = 1, limit = 20) {
