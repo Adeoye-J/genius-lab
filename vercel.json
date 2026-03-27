@@ -3,7 +3,6 @@
   "buildCommand": "pnpm run build",
   "devCommand": "pnpm run dev",
   "installCommand": "pnpm install",
-  "regions": ["frai"],
   "headers": [
     {
       "source": "/api/(.*)",
