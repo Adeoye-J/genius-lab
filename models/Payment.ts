@@ -10,7 +10,7 @@ export interface IPayment extends Document {
   paymentMethod?: 'card' | 'bank_transfer' | 'wallet';
   transactionReference?: string;
   paymentGateway: string;
-  status: 'pending' | 'successful' | 'failed';
+  status: 'processing' | 'pending' | 'successful' | 'failed';
   paidAt?: Date;
   createdAt: Date;
   updatedAt: Date;
@@ -61,7 +61,7 @@ const PaymentSchema = new mongoose.Schema<IPayment>(
     },
     status: {
       type: String,
-      enum: ['pending', 'successful', 'failed'],
+      enum: ['processing', 'pending', 'successful', 'failed'],
       default: 'pending',
       index: true,
     },

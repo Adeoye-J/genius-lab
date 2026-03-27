@@ -32,7 +32,7 @@ export default function PaymentCallbackClient({ txnRef }: { txnRef: string }) {
         const p = data.data;
         setAmount(p.amount);
         setJobId(p.jobId?._id ?? p.jobId ?? '');
-        setStatus(data.data.status);
+        setStatus(p.status);
 
         // If still pending, retry up to 4 times (Interswitch can be slightly async)
         if (data.data.status === 'pending' && attempts < 4) {

@@ -38,15 +38,17 @@ export async function POST(req: NextRequest) {
 
     const result = await verifyAndSettlePayment(transactionRef);
 
+    const {status, payment} = result
+
     return NextResponse.json<ApiResponse>({
       success: true,
       data: {
-        status:         result.status,
-        paymentId:      result.payment._id,
-        jobId:          result.payment.jobId,
-        amount:         result.payment.amount,
-        transactionRef: result.payment.transactionReference,
-        paidAt:         result.payment.paidAt,
+        status:         status,
+        paymentId:      payment?._id,
+        jobId:          payment?.jobId,
+        amount:         payment?.amount,
+        transactionRef: payment?.transactionReference,
+        paidAt:         payment?.paidAt,
       },
     });
   } catch (error) {

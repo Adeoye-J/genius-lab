@@ -12,6 +12,7 @@ export interface AuthUser {
   email: string;
   phone: string;
   role: 'worker' | 'customer' | 'admin';
+  profileImage: string | undefined;
   isVerified: boolean;
   isOnboarded: boolean;
 }
@@ -49,6 +50,7 @@ export async function getCurrentUser(): Promise<AuthUser | null> {
     email: user.email,
     phone: user.phone,
     role: user.role,
+    profileImage: user.profileImage,
     isVerified: user.isVerified,
     isOnboarded: user.isOnboarded,
   };

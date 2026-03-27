@@ -60,10 +60,18 @@ export default function WorkerProfilePage() {
           <div className="mt-8 flex flex-col sm:flex-row justify-between md:items-center gap-8">
             
             <div className="flex items-center gap-6">
-              {/* Avatar */}
-              <div className="w-28 h-28 rounded-full bg-white/10 backdrop-blur flex items-center justify-center text-3xl font-bold border border-white/20 glow-primary">
-                {initials}
-              </div>
+              {/* Profile Image / Initials */}
+              {worker.userId.profileImage ? (
+                <img
+                  src={worker.userId.profileImage}
+                  alt={worker.userId.name}
+                  className="w-28 h-28 rounded-full object-cover border-4 border-white/20"
+                />
+              ) : (
+                <div className="w-28 h-28 rounded-full bg-white/10 backdrop-blur flex items-center justify-center text-3xl font-bold border border-white/20 glow-primary">
+                  {initials}
+                </div>
+              )}
 
               {/* Info */}
               <div className="flex-1">

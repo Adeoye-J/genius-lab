@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { Banknote, BarChart, BriefcaseBusiness, DoorOpen, GitGraph, House, Map, Menu, Star } from 'lucide-react';
+import { ArrowRight, Banknote, BarChart, BriefcaseBusiness, DoorOpen, GitGraph, House, Map, Menu, Star } from 'lucide-react';
 import { NotificationsBell } from '@/components/ui/NotificationsBell';
 
 interface NavItem {
@@ -50,7 +50,7 @@ const NAV_ITEMS: NavItem[] = [
   },
 ];
 
-function Sidebar({ userName, onLogout }: { userName: string; onLogout: () => void }) {
+function Sidebar({ userName, onLogout, onCloseSidebar }: { userName: string; onLogout: () => void, onCloseSidebar?: () => void }) {
   const pathname = usePathname();
 
   return (
@@ -73,6 +73,7 @@ function Sidebar({ userName, onLogout }: { userName: string; onLogout: () => voi
             <Link
               key={item.href}
               href={item.href}
+              onClick={onCloseSidebar}
               className={`flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium transition-all text-black dark:text-white
                 ${isActive
                   ? 'bg-primary text-white'
@@ -88,17 +89,17 @@ function Sidebar({ userName, onLogout }: { userName: string; onLogout: () => voi
 
       {/* User footer */}
       <div className="p-4 border-t-2">
-        <div className="flex items-center gap-3 px-3 py-2 mb-2">
-          <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center shrink-0">
+        <Link href="/dashboard/worker/profile" className="flex items-center gap-3 px-3 py-2 mb-2 rounded-lg hover:bg-primary/10 dark:hover:bg-white/10 transition-all group cursor-pointer">
+          <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center shrink-0 overflow-hidden">
             <span className="text-primary text-sm font-bold">
               {userName.split(' ').map((n) => n[0]).join('').slice(0, 2).toUpperCase()}
             </span>
           </div>
           <div className="min-w-0">
             <p className="text-sm font-semibold text-primary truncate capitalize">{userName}</p>
-            <p className="text-xs text-black dark:text-white">Worker</p>
+            <p className="text-xs transition-colors text-black dark:text-white flex items-center gap-1">Worker · Edit profile <ArrowRight size={16} className='group-hover:translate-x-1 transition-all duration-300' /></p>
           </div>
-        </div>
+        </Link>
         <button
           onClick={onLogout}
           className="w-full flex items-center gap-3 px-3 py-3 rounded-lg text-sm transition-all bg-destructive text-white hover:bg-destructive/90 font-semibold cursor-pointer"
@@ -139,8 +140,8 @@ export default function WorkerDashboardLayout({ children }: { children: React.Re
       {mobileOpen && (
         <div className="fixed inset-0 z-50 lg:hidden">
           <div className="absolute inset-0 bg-transparent text-primary-foreground" onClick={() => setMobileOpen(false)} />
-          <div className="relative w-64 h-full">
-            <Sidebar userName={userName} onLogout={handleLogout} />
+          <div className="relative w-64 h-full" onClick={() => setMobileOpen(false)}>
+            <Sidebar userName={userName} onLogout={handleLogout} onCloseSidebar={() => setMobileOpen(false)} />
           </div>
         </div>
       )}

@@ -4,7 +4,8 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { NotificationsBell } from '@/components/ui/NotificationsBell';
-import { BriefcaseBusiness, DoorOpen, House, Map, Menu, UserPlus } from 'lucide-react';
+import { ArrowRight, BriefcaseBusiness, DoorOpen, House, Map, Menu, UserPlus } from 'lucide-react';
+import { AuthUser } from '@/lib/auth/auth';
 
 const NAV_ITEMS = [
   {
@@ -24,7 +25,7 @@ const NAV_ITEMS = [
   },
 ];
 
-function Sidebar({ userName, onLogout, onCloseSidebar }: { userName: string; onLogout: () => void; onCloseSidebar?: () => void }) {
+function Sidebar({ profilePicture, userName, onLogout, onCloseSidebar }: { profilePicture?: string, userName: string; onLogout: () => void; onCloseSidebar?: () => void }) {
   const pathname = usePathname();
   return (
     <aside className="w-64 min-h-screen flex flex-col border-r-2 bg-white dark:bg-black">
@@ -56,15 +57,24 @@ function Sidebar({ userName, onLogout, onCloseSidebar }: { userName: string; onL
       </nav>
 
       <div className="p-4 border-t-2">
-        <div className="flex items-center gap-3 px-3 py-2 mb-2">
-          <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center shrink-0">
+        <Link href="/dashboard/customer/profile" className="flex items-center gap-3 px-3 py-2 mb-2 rounded-lg hover:bg-primary/10 dark:hover:bg-white/10 transition-all group cursor-pointer">
+          {profilePicture ? (
+            <img
+              src={profilePicture}
+              alt={userName}
+              className="w-8 h-8 rounded-full object-cover border-4 border-white/20"
+            />
+          ) : (
+          <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center shrink-0 overflow-hidden">
             <span className="text-primary text-sm font-bold">{userName.split(' ').map((n) => n[0]).join('').slice(0, 2).toUpperCase()}</span>
           </div>
+          )}
+          
           <div className="min-w-0">
             <p className="text-sm font-semibold text-primary truncate capitalize">{userName}</p>
-            <p className="text-xs text-black dark:text-white">Customer</p>
+            <p className="text-xs transition-colors text-black dark:text-white flex items-center gap-1">Customer · Edit profile <ArrowRight size={16} className='group-hover:translate-x-1 transition-all duration-300' /></p>
           </div>
-        </div>
+        </Link>
         <button onClick={onLogout} className="w-full flex items-center gap-3 px-3 py-3 rounded-lg text-sm transition-all bg-destructive text-white hover:bg-destructive/90 font-semibold cursor-pointer">
           <DoorOpen />
           Sign Out
@@ -78,9 +88,17 @@ export default function CustomerDashboardLayout({ children }: { children: React.
   const router = useRouter();
   const [userName, setUserName] = useState('Customer');
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [profilePicture, setProfilePicture] = useState("")
 
   useEffect(() => {
-    fetch('/api/auth/me').then((r) => r.json()).then((d) => { if (d.success) setUserName(d.data.user.name); }).catch(() => {});
+    fetch('/api/auth/me')
+      .then((r) => r.json())
+      .then((d) => { if (d.success) {
+        setProfilePicture(d.data.user.profileImage); 
+        setUserName(d.data.user.name);
+        console.log(userName)
+        console.log(profilePicture)
+      }}).catch(() => {});
   }, []);
 
   async function handleLogout() {
@@ -91,7 +109,7 @@ export default function CustomerDashboardLayout({ children }: { children: React.
   return (
     <div className="flex min-h-screen bg-background">
       <div className="hidden lg:block shrink-0">
-        <Sidebar userName={userName} onLogout={handleLogout} />
+        <Sidebar profilePicture={profilePicture} userName={userName} onLogout={handleLogout} />
       </div>
       {mobileOpen && (
         <div className="fixed inset-0 z-50 lg:hidden">
