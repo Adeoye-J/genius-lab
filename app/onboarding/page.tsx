@@ -77,7 +77,7 @@ function WorkerStep1({ data, setData, onNext }: {
         type="button"
         onClick={onNext}
         disabled={!data.profession}
-        className="w-full h-11 rounded-lg bg-primary text-primary-foreground font-semibold text-sm
+        className="w-full h-11 rounded-lg bg-primary text-white font-semibold text-sm cursor-pointer
           hover:bg-primary/90 active:scale-[0.98] transition-all
           disabled:opacity-50 disabled:cursor-not-allowed"
       >
@@ -187,14 +187,14 @@ function WorkerStep2({ data, setData, onNext, onBack }: {
         <button
           type="button"
           onClick={onBack}
-          className="flex-1 h-11 rounded-lg border border-border bg-card text-foreground font-semibold text-sm hover:bg-muted transition-all"
+          className="flex-1 h-11 rounded-lg border border-border bg-card text-foreground font-semibold text-sm hover:bg-muted transition-all cursor-pointer"
         >
           Back
         </button>
         <button
           type="button"
           onClick={handleNext}
-          className="flex-1 h-11 rounded-lg bg-primary text-primary-foreground font-semibold text-sm hover:bg-primary/90 active:scale-[0.98] transition-all"
+          className="flex-1 h-11 rounded-lg bg-primary text-white font-semibold text-sm hover:bg-primary/90 active:scale-[0.98] transition-all cursor-pointer"
         >
           Continue
         </button>
@@ -431,7 +431,7 @@ function WorkerStep3({ data, setData, onSubmit, onBack, loading }: {
         </button>
         <button type="button" onClick={handleSubmit}
           disabled={loading || resolving || !data.bankVerified}
-          className="flex-1 h-11 rounded-lg bg-accent text-accent-foreground font-semibold text-sm hover:bg-accent/90 active:scale-[0.98] transition-all disabled:opacity-60">
+          className="flex-1 h-11 rounded-lg bg-accent text-white font-semibold text-sm hover:bg-accent/90 active:scale-[0.98] cursor-pointer transition-all disabled:opacity-60">
           {loading ? (
             <span className="flex items-center justify-center gap-2">
               <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
@@ -493,7 +493,7 @@ function CustomerStep({ name, loading, onSubmit }: {
         type="button"
         onClick={() => onSubmit(selected)}
         disabled={loading}
-        className="w-full h-11 rounded-lg bg-primary text-primary-foreground font-semibold text-sm
+        className="w-full h-11 rounded-lg bg-primary text-white cursor-pointer font-semibold text-sm
           hover:bg-primary/90 active:scale-[0.98] transition-all disabled:opacity-60"
       >
         {loading ? (

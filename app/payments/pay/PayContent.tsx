@@ -184,7 +184,7 @@ export default function PayContent({ jobId }: { jobId: string }) {
         <button
           onClick={handlePay}
           disabled={state === 'paying' || !job}
-          className="w-full h-12 rounded-xl bg-primary text-primary-foreground font-bold text-sm
+          className="w-full h-12 rounded-xl bg-primary text-white cursor-pointer font-bold text-sm
             hover:bg-primary/90 active:scale-[0.98] transition-all disabled:opacity-60 mb-3"
         >
           {state === 'paying' ? (
@@ -200,7 +200,7 @@ export default function PayContent({ jobId }: { jobId: string }) {
 
         <button
           onClick={() => router.back()}
-          className="w-full text-sm text-muted-foreground hover:text-foreground transition-colors"
+          className="w-full text-sm text-muted-foreground cursor-pointer hover:text-foreground transition-colors"
         >
           Cancel
         </button>

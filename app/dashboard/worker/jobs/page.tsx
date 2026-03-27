@@ -169,14 +169,14 @@ export default function WorkerJobsPage() {
                       <button
                         onClick={() => handleAction(job._id, 'accept')}
                         disabled={isActioning}
-                        className="ml-auto text-xs font-semibold px-3 py-1.5 rounded-lg bg-accent text-accent-foreground hover:bg-accent/90 disabled:opacity-60 transition-all"
+                        className="ml-auto text-xs font-semibold px-3 py-1.5 rounded-lg bg-accent text-accent-foreground cursor-pointer hover:bg-accent/90 disabled:opacity-60 transition-all"
                       >
                         {isActioning ? '...' : 'Accept'}
                       </button>
                       <button
                         onClick={() => handleAction(job._id, 'cancel')}
                         disabled={isActioning}
-                        className="text-xs font-semibold px-3 py-1.5 rounded-lg border border-border text-muted-foreground hover:bg-muted disabled:opacity-60 transition-all"
+                        className="text-xs font-semibold px-3 py-1.5 rounded-lg border border-border cursor-pointer text-muted-foreground hover:bg-muted disabled:opacity-60 transition-all"
                       >
                         Decline
                       </button>
@@ -187,7 +187,7 @@ export default function WorkerJobsPage() {
                     <button
                       onClick={() => handleAction(job._id, 'start')}
                       disabled={isActioning}
-                      className="ml-auto text-xs font-semibold px-3 py-1.5 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-60 transition-all"
+                      className="ml-auto text-xs font-semibold px-3 py-1.5 rounded-lg bg-primary cursor-pointer text-white hover:bg-primary/90 disabled:opacity-60 transition-all"
                     >
                       {isActioning ? '...' : 'Mark Started'}
                     </button>
@@ -197,7 +197,7 @@ export default function WorkerJobsPage() {
                     <button
                       onClick={() => handleAction(job._id, 'complete')}
                       disabled={isActioning}
-                      className="ml-auto text-xs font-semibold px-3 py-1.5 rounded-lg bg-accent text-accent-foreground hover:bg-accent/90 disabled:opacity-60 transition-all"
+                      className="ml-auto text-xs font-semibold px-3 py-1.5 rounded-lg bg-accent cursor-pointer text-accent-foreground hover:bg-accent/90 disabled:opacity-60 transition-all"
                     >
                       {isActioning ? '...' : 'Mark Complete'}
                     </button>
