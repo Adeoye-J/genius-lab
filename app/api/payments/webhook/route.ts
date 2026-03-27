@@ -1,4 +1,3 @@
-// app/api/payments/webhook/route.ts
 // Interswitch posts here when a transaction status changes.
 // Register this URL in your Quickteller Business Dashboard → Webhooks.
 //
